@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Drake.fm
 
-## Getting Started
+A personal site built with Next.js, centered on a map-based life timeline and a markdown-backed blog.
 
-First, run the development server:
+## Local Development
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run verification:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run lint
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
+- `src/app` - app routes
+- `src/components` - UI components including the site shell and map
+- `src/data/life-events.ts` - timeline data for the life map
+- `content/blog` - markdown blog posts
+- `src/lib/blog.ts` - blog loading and Ghost-link normalization
+- `.github/workflows/deploy-pages.yml` - GitHub Pages workflow
+- `WORKLOG.md` - current project state and hosting notes
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This repo is configured for static export and GitHub Pages deployment.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Relevant files:
 
-## Deploy on Vercel
+- `next.config.ts`
+- `.github/workflows/deploy-pages.yml`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Documentation Maintenance
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Keep docs in sync with the codebase.
+
+When changing deployment behavior, public assets, content sources, privacy-sensitive material, or launch readiness, update:
+
+- `WORKLOG.md` for current state and hosting notes
+- `README.md` for durable setup and structure notes

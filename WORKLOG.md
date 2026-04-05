@@ -30,19 +30,16 @@ The font asset was moved to:
 
 - `public/fonts/old-english-five/OldEnglishFive-axyVg.ttf`
 
-The previous font source folder still exists under:
-
-- `public/Resume/old-english-five-font/`
-
 ## Blog Setup
 
 Blog content is stored outside the app code in:
 
 - `content/blog`
 
-Ghost export source file:
+Import source status:
 
-- `public/Resume/drake-fm.ghost.2022-11-29-21-41-27.json`
+- the original Ghost export file has been removed from the public repo
+- imported markdown posts remain under `content/blog`
 
 Important blog implementation files:
 
@@ -180,6 +177,7 @@ At the current stopping point, the app was passing:
 ## Hosting Notes
 
 The user wants this document kept current as new things are learned.
+If an agent changes deployment setup, public assets, content sourcing, or other launch-relevant behavior, update this file in the same task.
 
 GitHub Pages deployment is the next likely major step.
 
