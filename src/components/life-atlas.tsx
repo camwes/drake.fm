@@ -32,7 +32,7 @@ type LifeAtlasProps = {
 };
 
 export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
-  const fallbackEvent = events[events.length - 1] ?? events[0] ?? EMPTY_EVENT;
+  const fallbackEvent = events.at(-1) ?? events[0] ?? EMPTY_EVENT;
   const [selectedId, setSelectedId] = useState(fallbackEvent?.id ?? "");
   const selectedEvent =
     events.find((event) => event.id === selectedId) ?? fallbackEvent;
@@ -43,7 +43,9 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
   const [activeRoute, setActiveRoute] = useState<LifeRoute | null>(null);
   const [routeProgress, setRouteProgress] = useState(1);
   const animationFrameRef = useRef<number | null>(null);
-  const routeLeadInTimeoutRef = useRef<number | null>(null);
+  const routeLeadInTimeoutRef = useRef<ReturnType<typeof globalThis.setTimeout> | null>(
+    null,
+  );
 
   const adjustZoom = (delta: number) => {
     setViewState((current) => ({

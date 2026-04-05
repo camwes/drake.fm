@@ -39,6 +39,37 @@ Relevant files:
 
 This site is live as a public site. Treat everything committed here as publicly readable and potentially permanently archived by clones, caches, and search engines.
 
+To deploy a new version of the site:
+
+1. Run verification locally:
+   - `npm run lint`
+   - `npm run build`
+2. Commit your changes.
+3. Push to `main`.
+4. GitHub Actions runs `.github/workflows/deploy-pages.yml`.
+5. GitHub Pages publishes the updated static site.
+
+Typical commands:
+
+```bash
+npm run lint
+npm run build
+git add .
+git commit -m "your message"
+git push origin main
+```
+
+After pushing:
+
+- open the repo `Actions` tab
+- watch the `Deploy to GitHub Pages` workflow
+- refresh the live site after the workflow succeeds
+
+GitHub-side requirements:
+
+- `Settings -> Pages -> Source` should be `GitHub Actions`
+- the repo must remain public for GitHub Pages on the current plan
+
 ## Public Repo Safety
 
 Before pushing changes, review anything new in these locations carefully:

@@ -27,5 +27,6 @@ Preferred working style:
 - When behavior changes, update the relevant docs instead of leaving cleanup for later.
 - Explain changes in plain language and focus on user-facing behavior rather than internal implementation trivia.
 - When tuning UI or animation details, prefer iterative adjustments that are easy to validate visually.
+- Regularly run verification while working, not just at the end. For changes that could affect deployability, check `npm run lint` and use `npm run build` before handing off or asking the user to push.
 - Keep repository guidance durable and project-specific so future agents can pick up context quickly.
 <!-- END:nextjs-agent-rules -->
