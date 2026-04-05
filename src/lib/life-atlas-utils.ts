@@ -167,6 +167,17 @@ export function clampZoom(zoom: number): number {
   return Math.max(1.5, Math.min(16, zoom));
 }
 
+export function interpolateCoordinates(
+  source: [number, number],
+  target: [number, number],
+  progress: number,
+): [number, number] {
+  return [
+    source[0] + (target[0] - source[0]) * progress,
+    source[1] + (target[1] - source[1]) * progress,
+  ];
+}
+
 export function buildRoutePulsePoints(
   route: LifeRoute,
   progress: number,

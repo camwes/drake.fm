@@ -65,6 +65,11 @@ After pushing:
 - watch the `Deploy to GitHub Pages` workflow
 - refresh the live site after the workflow succeeds
 
+Important:
+
+- `npm run lint` alone is not enough to guarantee a successful deploy
+- `npm run build` catches type and Next.js build issues that can still fail in GitHub Actions
+
 GitHub-side requirements:
 
 - `Settings -> Pages -> Source` should be `GitHub Actions`
