@@ -2,10 +2,8 @@
 title: Git
 slug: git
 date: '2014-01-21T06:10:00.000Z'
-excerpt: |-
-  When I first began seriously programming there were many instances in which I
-  almost gave up for feelings of inadequacy. One hurdle to being a proficient
-  developer that was particularly mind-numbing was grasping version 
+excerpt: >-
+  As a beginner it can feel as if people are speaking Klingon when they start talking about branching and cherry picking.
 canonicalUrl: ''
 featureImage: 'https://drake-ghost.s3.amazonaws.com/2017/07/gitflow.png'
 draft: true

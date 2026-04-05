@@ -3,12 +3,7 @@ title: State of Text Editors (2015)
 slug: editors
 date: '2014-12-16T23:47:21.000Z'
 excerpt: >-
-  If I had to fashion a guess, I would say learning to write code is going to be
-  a
-
-  popular New Year's Resolution. If you are a programmer (or looking to become
-
-  one) then you should understand that the most important tool i
+  The most important tool in your life should be your text editor. It's the paint-brush, the hammer, the scalpel or the grenade depending on the task.
 canonicalUrl: ''
 featureImage: 'https://drake-ghost.s3.amazonaws.com/2017/07/textmate.jpg'
 ---

@@ -2,13 +2,8 @@
 title: 'The Trump Talks: Environment'
 slug: trump-talks-environment
 date: '2017-08-06T22:41:12.000Z'
-excerpt: |-
-  > Recently, I spoke with a Trump Supporter about the environment.
-
-
-  High-Level points
-   * EPA administrator Scott Pruitt says that carbon dioxide’s role in the Earth’s
-     changing climate remains unclear. This is categori
+excerpt: >-
+  The planet is warming. Sea levels are rising. The polar ice caps are melting. Summers are getting hotter.
 canonicalUrl: ''
 featureImage: 'https://drake-ghost.s3.amazonaws.com/2017/08/trumpcoal.jpg'
 ---

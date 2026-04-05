@@ -2,10 +2,8 @@
 title: Whiteboard
 slug: whiteboard
 date: '2016-10-12T23:47:41.000Z'
-excerpt: |-
-  Coding interviews are stressful. I have been on both sides of many interviews
-  and have seen the process go many different ways. Being self taught I had just
-  as much to learn for the interview process as I did for actuall
+excerpt: >-
+  Show your work, it is as important as the "correct answer", arguably more so for the purposes of an interview.
 canonicalUrl: ''
 featureImage: 'https://drake-ghost.s3.amazonaws.com/2017/07/einsteinshow-1.jpg'
 draft: true

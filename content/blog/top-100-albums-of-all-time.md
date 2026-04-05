@@ -2,14 +2,8 @@
 title: Top 100 albums of all time
 slug: top-100-albums-of-all-time
 date: '2017-12-06T22:02:04.000Z'
-excerpt: |-
-  Recently I've engaged in an awesome learning experience. It started with a
-  simple facebook post:
-
-
-
-  This hyperbolic statement of course drew a number of responses, the most
-  interesting of which came from my friend Itamar
+excerpt: >-
+  Recently I've engaged in an awesome learning experience.
 canonicalUrl: ''
 featureImage: __GHOST_URL__/content/images/2017/12/5.jpg
 draft: true

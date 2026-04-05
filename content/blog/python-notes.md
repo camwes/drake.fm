@@ -2,23 +2,8 @@
 title: Python
 slug: python-notes
 date: '2015-08-21T20:38:42.000Z'
-excerpt: |-
-  python3.6 -m venv
-
-  Basics
-  # setting up variables… easy
-  my_variable = "deez nuts"
-  your_mama_is_fat = True
-  c = "cats"[0] # 'c'
-
-  """
-  MULTILINE COMMENT BITCH
-  """
-
-
-  Imports
-  import math            # Imports the math module
-  eve
+excerpt: >-
+  Methods that use dot notation only work with strings.
 canonicalUrl: ''
 featureImage: ''
 draft: true

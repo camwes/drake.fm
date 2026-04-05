@@ -2,11 +2,8 @@
 title: Building Websites
 slug: style-guide
 date: '2012-12-04T05:00:00.000Z'
-excerpt: |-
-  HTML
-  Using progressive HTML5 techniques can not only save you time developing, but
-  also can enrich performance. For example, rather than writing a long chunk of
-  code to validate a form input, use the new HTML5 form eleme
+excerpt: >-
+  Using progressive HTML5 techniques can not only save you time developing, but also can enrich performance.
 canonicalUrl: ''
 featureImage: 'https://drake-ghost.s3.amazonaws.com/2017/07/design-grammer.jpg'
 draft: true

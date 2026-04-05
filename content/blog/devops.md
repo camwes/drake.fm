@@ -2,13 +2,8 @@
 title: Devops
 slug: devops
 date: '2013-12-28T06:10:00.000Z'
-excerpt: >
-  In this post I will very briefly walk through my process for provisioning
-  Ubuntu
-
-  precise for a Node.js deployment on Amazon AWS. This guide isn't perfect and
-
-  could be out of date, but you can follow my side project dock
+excerpt: >-
+  In this post I will very briefly walk through my process for provisioning Ubuntu precise for a Node.js deployment on Amazon AWS.
 canonicalUrl: ''
 featureImage: 'https://drake-ghost.s3.amazonaws.com/2017/07/aws.png'
 draft: true

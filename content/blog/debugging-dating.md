@@ -2,10 +2,8 @@
 title: Debugging Dating
 slug: debugging-dating
 date: '2014-09-23T18:52:23.000Z'
-excerpt: |-
-  As a web developer, a lot of my time is spent debugging. While most people may
-  say that with disdain I personally enjoy the debugging process. Firstly, it
-  means that you have something to test. More importantly, I believ
+excerpt: >-
+  Recently single and out-of-practice at dating I've come to realize that I could apply the same theory to dating. What is it other than debugging people in the real world?
 canonicalUrl: ''
 featureImage: 'https://drake-ghost.s3.amazonaws.com/2017/07/404_kisscom.jpg'
 ---

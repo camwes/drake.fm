@@ -8,6 +8,7 @@ This project is a Next.js 16 app with:
 - a right-side timeline panel
 - a shared hamburger menu and side drawer
 - a blog powered by markdown files in `content/blog`
+- a live public deployment on GitHub Pages
 
 The current UI direction is:
 
@@ -179,16 +180,43 @@ At the current stopping point, the app was passing:
 The user wants this document kept current as new things are learned.
 If an agent changes deployment setup, public assets, content sourcing, or other launch-relevant behavior, update this file in the same task.
 
-GitHub Pages deployment is the next likely major step.
+GitHub Pages deployment is active.
 
 Current status:
 
 - app currently builds successfully with `next build`
 - `next.config.ts` is now configured for static export
-- GitHub Pages will require static export because there is no Node server runtime there
+- GitHub Pages uses static export because there is no Node server runtime there
 - project now includes a Pages workflow at `.github/workflows/deploy-pages.yml`
 - current config assumes GitHub Actions deployment to a project Pages URL and derives `basePath` / `assetPrefix` from `GITHUB_REPOSITORY`
 - `trailingSlash: true` is enabled for friendlier static hosting on GitHub Pages
+- the site is now live as a public site, so repo contents must be treated as public-by-default
+
+## Public Site Safety Rules
+
+Important rule:
+
+- anything committed to this repo should be assumed public and linkable
+
+Never add:
+
+- `.env` files
+- tokens, API keys, passwords, or private keys
+- CMS exports, backups, or raw source archives unless intentionally public
+- personal resumes or private reference material in `public/`
+- exact addresses, phone numbers, or other sensitive identifiers unless intentionally public
+
+Review carefully before pushing:
+
+- `public/`, because files there are directly downloadable
+- `content/blog`, because posts are public content
+- `src/data/life-events.ts`, because it contains personal timeline/location data
+- workflow changes in `.github/workflows/`
+
+If content, deployment, or public assets change, update both:
+
+- `WORKLOG.md`
+- `README.md`
 
 Likely GitHub Pages plan:
 

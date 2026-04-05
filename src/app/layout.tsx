@@ -20,8 +20,8 @@ const drakeWordmark = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Drake Life Map",
-  description: "A personal website concept built as a map-based life timeline.",
+  title: "Drake.fm",
+  description: "Personal website of Cameron W. Drake",
 };
 
 export default function RootLayout({

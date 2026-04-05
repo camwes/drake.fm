@@ -3,15 +3,7 @@ title: X-Ray Gifs
 slug: gifs
 date: '2014-07-02T21:09:48.000Z'
 excerpt: >-
-  Weiss Orthopaedics [http://weissortho.com] Design Project
-
-  When Dr. Noah Weiss [http://weissortho.com] approached me about redesigning
-  his
-
-  practice website he was very clear that he wanted something very interactive
-  and
-
-  f
+  When Dr. Noah Weiss approached me about redesigning his practice website he was very clear that he wanted something very interactive and fun, not just another boring doctor's website.
 canonicalUrl: ''
 featureImage: 'https://drake-ghost.s3.amazonaws.com/2017/07/premiere-1.jpg'
 ---

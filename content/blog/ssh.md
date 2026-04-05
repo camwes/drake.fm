@@ -3,14 +3,10 @@ title: SSH
 slug: ssh
 date: '2017-01-25T23:28:12.000Z'
 excerpt: >-
-  SSH is critical to all developers connecting to servers and is the safest most
-
-  common way to access remote servers. Whenever I think of SSH, I am reminded of
-  a
-
-  wonderful riddle that once stumped me good. The riddle is si
+  There are no tricks to this riddle but if you understand ssh keys then the solution should be fairly obvious to you.
 canonicalUrl: ''
 featureImage: ''
+draft: true
 ---
 SSH is critical to all developers connecting to servers and is the safest most common way to access remote servers. Whenever I think of SSH, I am reminded of a wonderful riddle that once stumped me good. The riddle is simple:
 

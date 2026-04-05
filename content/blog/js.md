@@ -2,8 +2,8 @@
 title: Learning Javascript
 slug: js
 date: '2012-12-04T04:47:00.000Z'
-excerpt: |-
-  Many people complain about the way that Javascript functions because using it effectively depends on a real understanding of some key concepts. Rather than bitch and moan about the nature of Javascript I will emulate my homie Crockford and focus on "The Good Parts".
+excerpt: >-
+  Rather than bitch and moan about the nature of Javascript I will emulate my homie Crockford and focus on "The Good Parts".
 canonicalUrl: ''
 featureImage: 'https://drake-ghost.s3.amazonaws.com/2017/07/JavaScript-Tools-1200.jpg'
 draft: true

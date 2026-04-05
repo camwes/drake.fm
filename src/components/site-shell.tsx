@@ -9,13 +9,14 @@ type SiteShellProps = {
 };
 
 const NAV_ITEMS = [
-  { href: "/", label: "Life Map" },
+  { href: "/", label: "Home" },
   { href: "/blog", label: "Blog" },
 ];
 
-export function SiteShell({ children }: SiteShellProps) {
+export function SiteShell({ children }: Readonly<SiteShellProps>) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const currentYear = new Date().getFullYear();
 
   return (
     <div className="relative flex min-h-full flex-1 flex-col">
@@ -67,9 +68,8 @@ export function SiteShell({ children }: SiteShellProps) {
         <div className="flex items-center justify-between border-b border-white/10 px-6 py-5">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#f8d57e]">
-              Navigation
+              Drake.fm
             </p>
-            <p className="mt-2 text-sm text-white/60">Explore the map and blog.</p>
           </div>
           <button
             type="button"
@@ -103,6 +103,11 @@ export function SiteShell({ children }: SiteShellProps) {
             })}
           </div>
         </nav>
+
+        <div className="border-t border-white/10 px-6 py-5 text-xs text-white/45">
+          <p>Copyright &copy; {currentYear} Cameron Drake</p>
+          <p className="mt-1">All rights reserved.</p>
+        </div>
       </aside>
 
       {children}

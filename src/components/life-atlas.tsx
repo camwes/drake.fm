@@ -1,59 +1,41 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ArcLayer, ScatterplotLayer } from "@deck.gl/layers";
+import { ScatterplotLayer } from "@deck.gl/layers";
 import { DeckGL } from "@deck.gl/react";
 import { FlyToInterpolator, type PickingInfo } from "@deck.gl/core";
 import Map from "react-map-gl/maplibre";
+import { FocusCard } from "@/components/focus-card";
 import type { LifeEvent } from "@/data/life-events";
-
-const INITIAL_VIEW_STATE = {
-  longitude: -98.5795,
-  latitude: 39.8283,
-  zoom: 3.35,
-  pitch: 28,
-  bearing: -10,
-};
-
-const MAP_STYLE = "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
+import {
+  SHORT_ROUTE_DISTANCE_METERS,
+  SHORT_ROUTE_DURATION,
+  SHORT_ROUTE_LEAD_IN_DURATION,
+  MAP_STYLE,
+  EMPTY_EVENT,
+  buildDirectViewState,
+  buildDrivePath,
+  buildRoutePulsePoints,
+  buildShortRouteFollowViewState,
+  buildShortRouteIntroViewState,
+  buildViewState,
+  clampZoom,
+  haversineDistanceMeters,
+  hexToRgb,
+  type AtlasViewState,
+  type LifeRoute,
+  type RoutePulsePoint,
+} from "@/lib/life-atlas-utils";
 
 type LifeAtlasProps = {
   events: LifeEvent[];
 };
 
-type LifeRoute = {
-  id: string;
-  source: [number, number];
-  target: [number, number];
-  sourceAccent: string;
-  targetAccent: string;
-};
-
-type RoutePulsePoint = {
-  id: string;
-  coordinates: [number, number, number];
-  radius: number;
-  alpha: number;
-};
-
-type AtlasViewState = {
-  longitude: number;
-  latitude: number;
-  zoom: number;
-  pitch: number;
-  bearing: number;
-  transitionDuration?: number;
-  transitionInterpolator?: FlyToInterpolator;
-};
-
-const NAVIGATION_DURATION = 3200;
-const ROUTE_HEIGHT_MULTIPLIER = 0.12;
-const ROUTE_PULSE_ALTITUDE_OFFSET = 12000;
-
-export function LifeAtlas({ events }: LifeAtlasProps) {
-  const [selectedId, setSelectedId] = useState(events[events.length - 1]?.id ?? "");
+export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
+  const fallbackEvent = events[events.length - 1] ?? events[0] ?? EMPTY_EVENT;
+  const [selectedId, setSelectedId] = useState(fallbackEvent?.id ?? "");
   const selectedEvent =
-    events.find((event) => event.id === selectedId) ?? events[events.length - 1];
+    events.find((event) => event.id === selectedId) ?? fallbackEvent;
   const selectedIndex = events.findIndex((event) => event.id === selectedEvent.id);
   const [viewState, setViewState] = useState<AtlasViewState>(() =>
     buildViewState(selectedEvent),
@@ -61,6 +43,7 @@ export function LifeAtlas({ events }: LifeAtlasProps) {
   const [activeRoute, setActiveRoute] = useState<LifeRoute | null>(null);
   const [routeProgress, setRouteProgress] = useState(1);
   const animationFrameRef = useRef<number | null>(null);
+  const routeLeadInTimeoutRef = useRef<number | null>(null);
 
   const adjustZoom = (delta: number) => {
     setViewState((current) => ({
@@ -101,17 +84,6 @@ export function LifeAtlas({ events }: LifeAtlasProps) {
       return [points];
     }
 
-    const route = new ArcLayer<LifeRoute>({
-      id: "life-path",
-      data: [activeRoute],
-      getSourcePosition: (segment) => segment.source,
-      getTargetPosition: (segment) => segment.target,
-      getHeight: () => ROUTE_HEIGHT_MULTIPLIER,
-      getSourceColor: (segment) => hexToRgb(segment.sourceAccent, 24),
-      getTargetColor: (segment) => hexToRgb(segment.targetAccent, 90),
-      getWidth: 3,
-    });
-
     const pulsePoints = buildRoutePulsePoints(activeRoute, routeProgress);
     const marker = new ScatterplotLayer<RoutePulsePoint>({
       id: "life-path-marker",
@@ -131,21 +103,28 @@ export function LifeAtlas({ events }: LifeAtlasProps) {
       },
     });
 
-    return [route, marker, points];
+    return [marker, points];
   }, [activeRoute, events, routeProgress, selectedEvent.id]);
 
   useEffect(() => {
     return () => {
       if (animationFrameRef.current !== null) {
-        window.cancelAnimationFrame(animationFrameRef.current);
+        globalThis.cancelAnimationFrame(animationFrameRef.current);
+      }
+      if (routeLeadInTimeoutRef.current !== null) {
+        globalThis.clearTimeout(routeLeadInTimeoutRef.current);
       }
     };
   }, []);
 
   const stopRouteAnimation = useCallback(() => {
     if (animationFrameRef.current !== null) {
-      window.cancelAnimationFrame(animationFrameRef.current);
+      globalThis.cancelAnimationFrame(animationFrameRef.current);
       animationFrameRef.current = null;
+    }
+    if (routeLeadInTimeoutRef.current !== null) {
+      globalThis.clearTimeout(routeLeadInTimeoutRef.current);
+      routeLeadInTimeoutRef.current = null;
     }
 
     setActiveRoute(null);
@@ -159,27 +138,45 @@ export function LifeAtlas({ events }: LifeAtlasProps) {
     setActiveRoute(route);
     setRouteProgress(0);
 
-    let startedAt: number | null = null;
+    const isShortRoute = route.distanceMeters <= SHORT_ROUTE_DISTANCE_METERS;
 
-    const step = (now: number) => {
-      if (startedAt === null) {
-        startedAt = now;
-      }
+    const runAnimation = () => {
+      let startedAt: number | null = null;
 
-      const progress = Math.min((now - startedAt) / NAVIGATION_DURATION, 1);
-      setRouteProgress(progress);
+      const step = (now: number) => {
+        startedAt ??= now;
 
-      if (progress < 1) {
-        animationFrameRef.current = window.requestAnimationFrame(step);
-        return;
-      }
+        const progress = Math.min((now - startedAt) / SHORT_ROUTE_DURATION, 1);
+        setRouteProgress(progress);
 
-      animationFrameRef.current = null;
-      setActiveRoute(null);
-      onComplete();
+        if (isShortRoute) {
+          setViewState(buildShortRouteFollowViewState(route, progress));
+        }
+
+        if (progress < 1) {
+      animationFrameRef.current = globalThis.requestAnimationFrame(step);
+          return;
+        }
+
+        animationFrameRef.current = null;
+        setActiveRoute(null);
+        onComplete();
+      };
+
+      animationFrameRef.current = globalThis.requestAnimationFrame(step);
     };
 
-    animationFrameRef.current = window.requestAnimationFrame(step);
+    if (!isShortRoute) {
+      setActiveRoute(null);
+      onComplete();
+      return;
+    }
+
+    setViewState(buildShortRouteIntroViewState(route));
+    routeLeadInTimeoutRef.current = globalThis.setTimeout(() => {
+      routeLeadInTimeoutRef.current = null;
+      runAnimation();
+    }, SHORT_ROUTE_LEAD_IN_DURATION);
     },
     [stopRouteAnimation],
   );
@@ -191,7 +188,10 @@ export function LifeAtlas({ events }: LifeAtlasProps) {
       }
 
       const targetIndex = events.findIndex((item) => item.id === event.id);
-      const shouldAnimateRoute = targetIndex === selectedIndex + 1;
+      const isSpecialDriveTransition =
+        selectedEvent.id === "school" && event.id === "coast";
+      const shouldAnimateRoute =
+        targetIndex === selectedIndex + 1 && isSpecialDriveTransition;
 
       if (shouldAnimateRoute) {
         const route = {
@@ -200,15 +200,19 @@ export function LifeAtlas({ events }: LifeAtlasProps) {
           target: event.coordinates,
           sourceAccent: selectedEvent.accent,
           targetAccent: event.accent,
+          distanceMeters: haversineDistanceMeters(
+            selectedEvent.coordinates,
+            event.coordinates,
+          ),
+          path: buildDrivePath(selectedEvent.id, event.id),
         };
 
-        setViewState(buildRouteViewState(route));
         startRouteAnimation(route, () => {
           setViewState(buildViewState(event));
         });
       } else {
         stopRouteAnimation();
-        setViewState(buildViewState(event));
+        setViewState(buildDirectViewState(selectedEvent, event));
       }
 
       setSelectedId(event.id);
@@ -217,73 +221,82 @@ export function LifeAtlas({ events }: LifeAtlasProps) {
   );
 
   return (
-    <section className="grid h-full grid-cols-1 gap-0 lg:grid-cols-[minmax(0,1fr)_360px]">
-      <div className="relative min-h-[55vh] overflow-hidden border-b border-[#5d3827] bg-[#120c0b] shadow-[0_24px_80px_rgba(0,0,0,0.4)] lg:min-h-0 lg:border-b-0 lg:border-r">
-        <DeckGL
-          viewState={viewState}
-          onViewStateChange={({ viewState: nextViewState }) =>
-            setViewState(nextViewState as AtlasViewState)
-          }
-          controller
-          layers={layers}
-          getTooltip={({ object }) =>
-            object
-              ? {
-                  html: `<strong>${object.title}</strong><div>${object.year} / ${object.city}</div>`,
-                }
-              : null
-          }
-        >
-          <Map mapStyle={MAP_STYLE} />
-        </DeckGL>
+    <section className="grid min-h-screen grid-cols-1 gap-0 lg:h-full lg:min-h-0 lg:grid-cols-[minmax(0,1fr)_360px]">
+      <div className="relative flex flex-col border-b border-[#5d3827] bg-[#120c0b] shadow-[0_24px_80px_rgba(0,0,0,0.4)] lg:min-h-0 lg:border-b-0 lg:border-r">
+        <div className="relative min-h-[52vh] overflow-hidden sm:min-h-[60vh] lg:min-h-0 lg:flex-1">
+          <DeckGL
+            viewState={viewState}
+            onViewStateChange={({ viewState: nextViewState }) =>
+              setViewState(nextViewState as AtlasViewState)
+            }
+            controller
+            layers={layers}
+            getTooltip={({ object }) =>
+              object
+                ? {
+                    html: `<strong>${object.title}</strong><div>${object.year} / ${object.city}</div>`,
+                  }
+                : null
+            }
+          >
+            <Map mapStyle={MAP_STYLE} />
+          </DeckGL>
 
-        <div className="absolute right-4 top-4 z-20 flex flex-col overflow-hidden rounded-2xl border border-[#7a4a2b] bg-[#2a1812]/90 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur">
-          <button
-            type="button"
-            onClick={() => adjustZoom(1)}
-            className="flex h-11 w-11 items-center justify-center border-b border-[#7a4a2b] text-xl font-semibold text-[#fff4df] transition hover:bg-[#3a2119]"
-            aria-label="Zoom in"
-          >
-            +
-          </button>
-          <button
-            type="button"
-            onClick={() => adjustZoom(-1)}
-            className="flex h-11 w-11 items-center justify-center text-xl font-semibold text-[#fff4df] transition hover:bg-[#3a2119]"
-            aria-label="Zoom out"
-          >
-            -
-          </button>
+          <div className="absolute right-4 top-4 z-20 hidden flex-col overflow-hidden rounded-2xl border border-[#7a4a2b] bg-[#2a1812]/90 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur lg:flex">
+            <button
+              type="button"
+              onClick={() => adjustZoom(1)}
+              className="flex h-11 w-11 items-center justify-center border-b border-[#7a4a2b] text-xl font-semibold text-[#fff4df] transition hover:bg-[#3a2119]"
+              aria-label="Zoom in"
+            >
+              +
+            </button>
+            <button
+              type="button"
+              onClick={() => adjustZoom(-1)}
+              className="flex h-11 w-11 items-center justify-center text-xl font-semibold text-[#fff4df] transition hover:bg-[#3a2119]"
+              aria-label="Zoom out"
+            >
+              -
+            </button>
+          </div>
+
+          <FocusCard
+            event={selectedEvent}
+            className="absolute inset-x-4 bottom-4 z-20 hidden max-w-2xl rounded-[1.75rem] border border-white/10 bg-black/45 p-5 backdrop-blur md:inset-x-6 md:bottom-6 md:p-6 lg:block"
+          />
         </div>
 
-        <div className="absolute inset-x-4 bottom-4 z-20 max-w-2xl rounded-[1.75rem] border border-white/10 bg-black/45 p-5 backdrop-blur md:inset-x-6 md:bottom-6 md:p-6">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <p className="text-xs uppercase tracking-[0.25em] text-[#f8d57e]">
-                Current focus
-              </p>
-              <h2 className="mt-2 text-2xl font-semibold text-white md:text-3xl">
-                {selectedEvent.title}
-              </h2>
-              <p className="mt-2 text-sm uppercase tracking-[0.2em] text-[#f0b77f]">
-                {selectedEvent.year} / {selectedEvent.city}
-              </p>
-            </div>
-            <div
-              className="mt-1 h-4 w-4 rounded-full border border-white/70 shadow-[0_0_24px_rgba(248,213,126,0.45)]"
-              style={{ backgroundColor: selectedEvent.accent }}
-            />
-          </div>
-          <p className="mt-4 select-text text-sm leading-6 text-[#f5d4b5]">
-            {selectedEvent.summary}
-          </p>
-          <p className="mt-3 select-text text-sm leading-7 text-white/78">
-            {selectedEvent.detail}
-          </p>
+        <div className="border-t border-white/10 bg-[#130d0c] px-4 py-5 lg:hidden">
+          <FocusCard
+            event={selectedEvent}
+            className="rounded-[1.5rem] border border-white/10 bg-black/35 p-5"
+            headingClassName="text-2xl"
+          />
         </div>
       </div>
 
-      <aside className="flex min-h-0 flex-col bg-[#130d0c]">
+      <div className="absolute right-4 top-[26vh] z-30 flex -translate-y-1/2 flex-col gap-3 sm:top-[30vh] lg:hidden">
+        {events.map((event) => {
+          const isSelected = event.id === selectedEvent.id;
+
+          return (
+            <button
+              key={event.id}
+              type="button"
+              onClick={() => selectEvent(event)}
+              className={`h-4 w-4 rounded-full border-2 transition ${
+                isSelected
+                  ? "border-[#f6cb79] bg-[#f8d57e] shadow-[0_0_20px_rgba(248,213,126,0.55)]"
+                  : "border-[#7a4a2b] bg-[#1a100d]/90 hover:border-[#f0b77f] hover:bg-[#2a1812]"
+              }`}
+              aria-label={`Select ${event.title}`}
+            />
+          );
+        })}
+      </div>
+
+      <aside className="hidden min-h-0 flex-col bg-[#130d0c] lg:flex lg:max-h-screen">
         <div className="border-b border-white/10 px-6 py-5">
           <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#f8d57e]">
             Timeline
@@ -342,146 +355,4 @@ export function LifeAtlas({ events }: LifeAtlasProps) {
       </aside>
     </section>
   );
-}
-
-function buildViewState(event: LifeEvent): AtlasViewState {
-  return {
-    ...INITIAL_VIEW_STATE,
-    longitude: event.coordinates[0],
-    latitude: event.coordinates[1],
-    zoom: 8,
-    pitch: 34,
-    transitionDuration: 1800,
-    transitionInterpolator: new FlyToInterpolator(),
-  };
-}
-
-function buildRouteViewState(route: LifeRoute): AtlasViewState {
-  const longitudeSpan = Math.abs(route.target[0] - route.source[0]);
-  const latitudeSpan = Math.abs(route.target[1] - route.source[1]);
-  const span = Math.max(longitudeSpan, latitudeSpan);
-
-  return {
-    ...INITIAL_VIEW_STATE,
-    longitude: (route.source[0] + route.target[0]) / 2,
-    latitude: (route.source[1] + route.target[1]) / 2,
-    zoom: getRouteZoom(span),
-    pitch: 42,
-    bearing: clampBearing(getRouteBearing(route.source, route.target)),
-    transitionDuration: 1200,
-    transitionInterpolator: new FlyToInterpolator(),
-  };
-}
-
-function hexToRgb(hex: string, alpha = 255): [number, number, number, number] {
-  const normalized = hex.replace("#", "");
-  const numeric = Number.parseInt(normalized, 16);
-
-  return [(numeric >> 16) & 255, (numeric >> 8) & 255, numeric & 255, alpha];
-}
-
-function clampZoom(zoom: number): number {
-  return Math.max(1.5, Math.min(16, zoom));
-}
-
-function interpolateCoordinates(
-  source: [number, number],
-  target: [number, number],
-  progress: number,
-): [number, number] {
-  return [
-    source[0] + (target[0] - source[0]) * progress,
-    source[1] + (target[1] - source[1]) * progress,
-  ];
-}
-
-function buildRoutePulsePoints(
-  route: LifeRoute,
-  progress: number,
-): RoutePulsePoint[] {
-  return [createPulsePoint(route, progress, "head")];
-}
-
-function createPulsePoint(
-  route: LifeRoute,
-  progress: number,
-  idSuffix: string,
-): RoutePulsePoint {
-  return {
-    id: `${route.id}-${idSuffix}`,
-    coordinates: interpolateArcCoordinates(route.source, route.target, progress),
-    radius: 6,
-    alpha: 215,
-  };
-}
-
-function interpolateArcCoordinates(
-  source: [number, number],
-  target: [number, number],
-  progress: number,
-): [number, number, number] {
-  const [longitude, latitude] = interpolateCoordinates(source, target, progress);
-  const arcHeight =
-    getArcHeightMeters(source, target, progress) + ROUTE_PULSE_ALTITUDE_OFFSET;
-
-  return [longitude, latitude, arcHeight];
-}
-
-function getArcHeightMeters(
-  source: [number, number],
-  target: [number, number],
-  progress: number,
-): number {
-  const distance = haversineDistanceMeters(source, target);
-  return Math.sqrt(progress * (1 - progress)) * distance * ROUTE_HEIGHT_MULTIPLIER;
-}
-
-function haversineDistanceMeters(
-  source: [number, number],
-  target: [number, number],
-): number {
-  const earthRadius = 6371000;
-  const sourceLatitude = toRadians(source[1]);
-  const targetLatitude = toRadians(target[1]);
-  const deltaLatitude = toRadians(target[1] - source[1]);
-  const deltaLongitude = toRadians(target[0] - source[0]);
-
-  const a =
-    Math.sin(deltaLatitude / 2) ** 2 +
-    Math.cos(sourceLatitude) *
-      Math.cos(targetLatitude) *
-      Math.sin(deltaLongitude / 2) ** 2;
-
-  return 2 * earthRadius * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
-
-function toRadians(value: number): number {
-  return (value * Math.PI) / 180;
-}
-
-function getRouteZoom(span: number): number {
-  if (span > 28) {
-    return 3.3;
-  }
-  if (span > 18) {
-    return 4.1;
-  }
-  if (span > 10) {
-    return 4.8;
-  }
-  if (span > 5) {
-    return 5.6;
-  }
-  return 6.6;
-}
-
-function getRouteBearing(
-  source: [number, number],
-  target: [number, number],
-): number {
-  return (Math.atan2(target[0] - source[0], target[1] - source[1]) * 180) / Math.PI;
-}
-
-function clampBearing(bearing: number): number {
-  return Math.max(-35, Math.min(35, bearing));
 }

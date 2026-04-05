@@ -2,10 +2,8 @@
 title: Dock
 slug: dock
 date: '2014-06-25T07:00:00.000Z'
-excerpt: |-
-  Dock [https://github.com/camwes/dock] - Open Source Development Environment
-  Writing good code starts with building a rich development environment
-  [https://en.wikipedia.org/wiki/development_environment] using the best too
+excerpt: >-
+  Writing good code starts with building a rich development environment using the best tools.
 canonicalUrl: ''
 featureImage: 'https://drake-ghost.s3.amazonaws.com/2017/07/dock.jpg'
 draft: true

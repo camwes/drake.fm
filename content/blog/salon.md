@@ -2,12 +2,8 @@
 title: Salon
 slug: salon
 date: '2017-08-15T21:58:04.000Z'
-excerpt: |-
-  TLDR; you are invited to 505 Grove st EVERY Thursday evening for drinking,
-  chilling and stimulating conversation.
-
-  I know a lot of dope people. If you are reading this, you are probably one of
-  them. The best thing about 
+excerpt: >-
+  The best thing about knowing so many cool people is getting them together in the same room and observing the outcome.
 canonicalUrl: ''
 featureImage: ''
 ---

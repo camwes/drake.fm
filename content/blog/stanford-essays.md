@@ -2,11 +2,8 @@
 title: Stanford Essays
 slug: stanford-essays
 date: '2006-11-01T21:58:45.000Z'
-excerpt: |-
-  Of all the activities, interests, and experiences listed on the previous page,
-  which is the most meaningful to you and why?
-  Every Saturday during the winter months I have to abandon my given name and
-  assume a new identit
+excerpt: >-
+  People formulate preconceptions and set expectations, and it is exceeding that expectation that gives me the greatest satisfaction.
 canonicalUrl: ''
 featureImage: ''
 ---

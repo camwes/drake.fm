@@ -3,17 +3,7 @@ title: DJ Gigs
 slug: dj
 date: '2016-10-25T22:27:00.000Z'
 excerpt: >-
-  How I Play
-
-
-  A few years ago I purchased a few Native Instruments controllers because I
-
-  wanted a new hobby and DJing seemed like fun. The first controller that I
-  bought
-
-  was the X1
-
-  [http://www.native-instruments.com/en/pro
+  While this setup was easy to use and offered a lot of functionality, I had begun DJing at clubs and major venues, and it was getting to be real annoying having to bring my computer and controllers to the club.
 canonicalUrl: ''
 featureImage: >-
   https://drake-ghost.s3.amazonaws.com/2017/07/13123067_10206336991720717_9055136459238357647_o.jpg

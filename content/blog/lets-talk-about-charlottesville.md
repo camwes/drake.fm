@@ -2,14 +2,8 @@
 title: You Don't Scare Me
 slug: lets-talk-about-charlottesville
 date: '2017-08-15T21:03:35.000Z'
-excerpt: |-
-  Unite the Right Rally... Charlottesville, VA... August 11-12
-
-
-  Let's Talk About Charlottesville.
-
-  I have only been to Charlottesville one time, and I was actually quite fond of
-  the place. In 2006, I was chosen as a Ron B
+excerpt: >-
+  I've been through some shit in my life. None of this has stopped me, nor will you.
 canonicalUrl: ''
 featureImage: 'https://drake-ghost.s3.amazonaws.com/2017/08/mgid-ao-image-logotv.jpg'
 ---
@@ -23,11 +17,11 @@ I have only been to Charlottesville one time, and I was actually quite fond of t
 
 Why? I was born in Robbins, Illinois, a small village in the south suburbs of Chicago that is one of the most historic black towns in America. Long before Dwyane Wade's was getting buckets at Richards HS, this town was renown for having the first black airport,[\[3\]](#fn3) which was the only place that most black pilots, like the [Tuskegee Airmen](https://en.wikipedia.org/wiki/Tuskegee_Airmen), could train. Around the age of 5 or so I moved to 83rd & Cottage Grove in the Chatham neighborhood of Chicago's Southside, home of Chance the Rapper. During my childhood my family struggled with drug addiction and violence on a continuing basis. The Chicago that people talk about with fear and pity is the same place that I learned to ride a bike and play basketball. It was also a place where I learned how to survive.
 
-<iframe width="100%" height="450" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/305839110&amp;color=ff5500&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true"></iframe>\> If you've got 30 mins to kill I talk with my friend Emily about my childhood on her podcast.
+<iframe width="100%" height="450" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/305839110&amp;color=ff5500&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true"></iframe> If you've got 30 mins to kill I talk with my friend Emily about my childhood on her podcast.
 
 Eventually, I moved to Harvey, a city just south of Chicago that has all the familiar problems of the South-Side with a fraction of the police force. This town is probably most known for its rampant corruption, which is very well documented.[\[4\]](#fn4) The violence I grew up with in Chicago was honestly mild compared to what goes on in Harvey. I lost enough friends to gun violence to stop counting. Harvey was unofficially known as the unsolved murder capital while I was in high school.[\[5\]](#fn5)
 
-<iframe width="100%" height="400" src="https://www.youtube.com/embed/lZdnwbiZlIg" frameborder="0" allowfullscreen=""></iframe>\> Barack Obama talks about Harvey, IL
+<iframe width="100%" height="400" src="https://www.youtube.com/embed/lZdnwbiZlIg" frameborder="0" allowfullscreen=""></iframe> Barack Obama talks about Harvey, IL
 
 While Chicago is sometimes known as ChiRaq, it's actually Harvey that's a closer comparison.[\[6\]](#fn6) By the time I was graduating third in my class in high school Harvey PD was 0-9 on homicides that year, the most recent of which was a good friend of mine and classmate **Willie Llyod III** who was found dead in an alley by an elementary school [mere weeks before graduation](http://articles.chicagotribune.com/2006-04-10/news/0604100169_1_killing-shot-cook-county-medical-examiner). In case you were wondering yes, he is the grandson of infamous Vice Lord boss [Willie Lloyd](http://chicago.suntimes.com/columnists/carol-marin-willie-lloyd-the-king-of-kings-has-died/). On the streets many people thought that Willie's death was a hit by none other than Mayor Eric Kellogg. The city of Harvey was ordered to pay $1.4 million to settle a civil suit accusing Kellogg and a police detective of sending a man to prison because they thought he and Willie stole cocaine from them.[\[7\]](#fn7)
 
