@@ -10,6 +10,8 @@ draft: true
 ---
 Coding interviews are stressful. I have been on both sides of many interviews and have seen the process go many different ways. Being self taught I had just as much to learn for the interview process as I did for actually doing my job.
 
+Related reading: [[js|Learning Javascript]] and [[python-notes|Python]].
+
 ![tweet](https://drake-ghost.s3.amazonaws.com/2016/10/1-tsHwsy-_jG4acGFOSYJRVA.jpeg)
 
 ## Preparation
@@ -46,7 +48,7 @@ Every interview will start with some basic conversational questions that can gen
 
 *   What is the DOM?
 *   How does the [browser work](https://www.html5rocks.com/en/tutorials/internals/howbrowserswork/)?
-*   What is a closure?
+*   What is a closure? See [[js|Learning Javascript]].
 *   How does this work?
 *   Describe a few ways to communicate between a server and a client. Describe how a few network protocols work at a high level (IP, TCP, HTTP/S/2, UDP, RTC, DNS, etc.)
 *   What is the node.js [event loop](https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/)

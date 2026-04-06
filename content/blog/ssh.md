@@ -10,6 +10,8 @@ draft: true
 ---
 SSH is critical to all developers connecting to servers and is the safest most common way to access remote servers. Whenever I think of SSH, I am reminded of a wonderful riddle that once stumped me good. The riddle is simple:
 
+Related reading: [Git](__BLOG_URL__/git), [Devops](__BLOG_URL__/devops), and [Dock](__BLOG_URL__/dock).
+
 > There is a man who lives in Moscow, and his girlfriend lives in Siberia. One day he needs to send her an important package, the contents of which are not relevant, but ever more important. Here's the rub, the Russian postal service is corrupt, and the only way to safely send mail is to send it in a locked chest. They will literally pillage, steal or destroy any mail that is not secured with a lock and key. He has his own lock and his own key, as does she. But they don't have the keys to each other's lock. How can they send the package confident that it will safely arrive?
 
 There are no tricks to this riddle but if you understand ssh keys then the solution should be fairly obvious to you.

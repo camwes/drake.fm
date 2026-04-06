@@ -76,6 +76,40 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             {post.content}
           </ReactMarkdown>
         </article>
+
+        {post.backlinks.length > 0 ? (
+          <section className="mt-12 rounded-[2rem] border border-[#5d3827] bg-[#1a100d] p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#f8d57e]">
+              Linked From
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              {post.backlinks.map((backlink) => (
+                <Link
+                  key={backlink.slug}
+                  href={backlink.href}
+                  className="rounded-full border border-[#7a4a2b] bg-[#2a1812] px-4 py-2 text-sm text-[#f2d4b0] transition hover:bg-[#3a2119]"
+                >
+                  {backlink.title}
+                </Link>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        {isDevelopment && post.wikilinkIssues.length > 0 ? (
+          <section className="mt-6 rounded-[2rem] border border-[#8b5c39] bg-[#24130d] p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#f8d57e]">
+              Wikilink Warnings
+            </p>
+            <ul className="mt-4 space-y-2 text-sm leading-6 text-[#f2d4b0]">
+              {post.wikilinkIssues.map((issue) => (
+                <li key={`${issue.target}-${issue.message}`}>
+                  <code className="text-[#f8d57e]">{issue.target}</code>: {issue.message}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
       </div>
     </main>
   );

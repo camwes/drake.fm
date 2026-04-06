@@ -10,6 +10,8 @@ draft: true
 ---
 In this post I will very briefly walk through my process for provisioning Ubuntu precise for a Node.js deployment on Amazon AWS. This guide isn't perfect and could be out of date, but you can follow my side project [dock](https://github.com/camwes/dock) I try and provide up-to-date scripts that you can use to provision your own servers.
 
+Related reading: [[git|Git]], [[ssh|SSH]], and [[dock|Dock]].
+
 ### Before you get Started
 
 There are a few steps that obviously need to be done that I'm not going to get into for brevity's sake but should be very simple to figure out:
@@ -69,7 +71,7 @@ $ ssh -i ~/.ssh/your_key_pair.pem ec2-user@ec2-00-000-000-00.compute-1.amazonaws
 
 Using the Public DNS that you find in your EC2 properties panel for that last part. If you don't understand ssh please read [this](http).
 
-## 2\. [Provision Instance](__GHOST_URL__/dock)
+## 2\. [[dock|Provision Instance]]
 
 So you're connected to your EC2 instance… What now? In the past the next steps were pretty straightforward and hardly disputable: Install and configure the typical LAMP stack technologies: PHP, MySQL and Apache.
 

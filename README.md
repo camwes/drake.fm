@@ -23,10 +23,44 @@ npm run build
 - `src/components` - UI components including the site shell, map, and shared focus card
 - `src/data/life-events.ts` - timeline data for the map
 - `content/blog` - markdown blog posts
-- `src/lib/blog.ts` - blog loading and Ghost-link normalization
+- `src/lib/blog.ts` - blog loading, legacy placeholder normalization, and wikilink/backlink data
 - `src/lib/life-atlas-utils.ts` - reusable map camera and route helpers
 - `.github/workflows/deploy-pages.yml` - GitHub Pages workflow
 - `WORKLOG.md` - current project state and hosting notes
+
+## Blog Authoring
+
+The blog supports standard markdown links and Obsidian-style wikilinks.
+
+Supported wikilink forms:
+
+- `[[slug]]`
+- `[[Post Title]]`
+- `[[target|Custom Label]]`
+
+Resolution behavior:
+
+- exact slug matches first
+- normalized slug matches next
+- title and `aliases` frontmatter are used as fallbacks
+
+Optional frontmatter:
+
+```yaml
+aliases:
+  - JavaScript
+  - JS Notes
+tags:
+  - programming
+  - notes
+```
+
+Notes:
+
+- invalid wikilinks show warnings in development on the post page
+- invalid wikilinks fail production builds so the published note graph stays healthy
+- backlinks are rendered automatically at the bottom of each post
+- the legacy `__BLOG_URL__` placeholder is normalized to `/blog`
 
 ## Deployment
 

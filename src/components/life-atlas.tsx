@@ -34,6 +34,7 @@ type LifeAtlasProps = {
 export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
   const fallbackEvent = events.at(-1) ?? events[0] ?? EMPTY_EVENT;
   const [selectedId, setSelectedId] = useState(fallbackEvent?.id ?? "");
+  const [isMapReady, setIsMapReady] = useState(false);
   const selectedEvent =
     events.find((event) => event.id === selectedId) ?? fallbackEvent;
   const selectedIndex = events.findIndex((event) => event.id === selectedEvent.id);
@@ -46,6 +47,7 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
   const routeLeadInTimeoutRef = useRef<ReturnType<typeof globalThis.setTimeout> | null>(
     null,
   );
+  const mapMountFrameRef = useRef<number | null>(null);
 
   const adjustZoom = (delta: number) => {
     setViewState((current) => ({
@@ -109,7 +111,15 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
   }, [activeRoute, events, routeProgress, selectedEvent.id]);
 
   useEffect(() => {
+    mapMountFrameRef.current = globalThis.requestAnimationFrame(() => {
+      setIsMapReady(true);
+      mapMountFrameRef.current = null;
+    });
+
     return () => {
+      if (mapMountFrameRef.current !== null) {
+        globalThis.cancelAnimationFrame(mapMountFrameRef.current);
+      }
       if (animationFrameRef.current !== null) {
         globalThis.cancelAnimationFrame(animationFrameRef.current);
       }
@@ -226,23 +236,27 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
     <section className="grid min-h-screen grid-cols-1 gap-0 lg:h-full lg:min-h-0 lg:grid-cols-[minmax(0,1fr)_360px]">
       <div className="relative flex flex-col border-b border-[#5d3827] bg-[#120c0b] shadow-[0_24px_80px_rgba(0,0,0,0.4)] lg:min-h-0 lg:border-b-0 lg:border-r">
         <div className="relative min-h-[52vh] overflow-hidden sm:min-h-[60vh] lg:min-h-0 lg:flex-1">
-          <DeckGL
-            viewState={viewState}
-            onViewStateChange={({ viewState: nextViewState }) =>
-              setViewState(nextViewState as AtlasViewState)
-            }
-            controller
-            layers={layers}
-            getTooltip={({ object }) =>
-              object
-                ? {
-                    html: `<strong>${object.title}</strong><div>${object.year} / ${object.city}</div>`,
-                  }
-                : null
-            }
-          >
-            <Map mapStyle={MAP_STYLE} />
-          </DeckGL>
+          {isMapReady ? (
+            <DeckGL
+              viewState={viewState}
+              onViewStateChange={({ viewState: nextViewState }) =>
+                setViewState(nextViewState as AtlasViewState)
+              }
+              controller
+              layers={layers}
+              getTooltip={({ object }) =>
+                object
+                  ? {
+                      html: `<strong>${object.title}</strong><div>${object.year} / ${object.city}</div>`,
+                    }
+                  : null
+              }
+            >
+              <Map mapStyle={MAP_STYLE} />
+            </DeckGL>
+          ) : (
+            <div className="absolute inset-0 bg-[#120c0b]" aria-hidden="true" />
+          )}
 
           <div className="absolute right-4 top-4 z-20 hidden flex-col overflow-hidden rounded-2xl border border-[#7a4a2b] bg-[#2a1812]/90 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur lg:flex">
             <button

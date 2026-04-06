@@ -12,6 +12,8 @@ draft: true
 
 Using progressive HTML5 techniques can not only save you time developing, but also can enrich performance. For example, rather than writing a long chunk of code to validate a form input, use the new HTML5 form elements which automatically validate (input="email"). Of the many HTML5 features the most important are:
 
+Related reading: [[js|Learning Javascript]] and [[editors|State of Text Editors (2015)]].
+
 ### [Semantics](http://diveintohtml5.info/semantics.html)
 
 ### [Better Forms](http://diveintohtml5.info/forms.html)
@@ -154,7 +156,7 @@ I would suggest following the link for a more detailed explanation of specificit
 
 ## Javascript
 
-Javascript is the predicate of the sentence and needs to be discussed in depth. I am drafting [this overview](__GHOST_URL__/javascript).  
+Javascript is the predicate of the sentence and needs to be discussed in depth. Start with [[js|this overview]].  
 ![Javascript](https://drake-ghost.s3.amazonaws.com/2014/Apr/JavaScript-Tools-1200.jpg)
 
 ## High Performance Websites

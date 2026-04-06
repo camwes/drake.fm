@@ -11,6 +11,8 @@ draft: true
 ---
 python3.6 -m venv
 
+Related reading: [[whiteboard|Whiteboard]] and [[debugging-dating|Debugging Dating]].
+
 ## Basics
 
 ```python

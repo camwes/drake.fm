@@ -5,7 +5,7 @@ date: '2017-12-06T22:02:04.000Z'
 excerpt: >-
   Recently I've engaged in an awesome learning experience.
 canonicalUrl: ''
-featureImage: __GHOST_URL__/content/images/2017/12/5.jpg
+featureImage: __BLOG_URL__/content/images/2017/12/5.jpg
 draft: true
 ---
 Recently I've engaged in an awesome learning experience. It started with a simple facebook post:
@@ -209,7 +209,7 @@ This is a long album packed with some of Stevie's best songs. Knocks me off my f
 
 Elvis has one of the most fun voices to listen to, period. He fucking nails Tutti Frutti! (side-note, who knew Little Richard was alive?) I didn't really ever think about the fact that Elvis Presley was the "King of Rock and Roll", as in he birthed popular Rock & Roll from an era of doo wop and classic vocalist shit like the rat pack and motherfuckers singing in the still of the night. It's possible that only he could have done this (because of his looks and general swag) which got me thinking: Who's responsible for where the pop charts are today? While Rihanna and Beyonce are the most dominant pop artists around, the chart that I attached shows that perhaps lil Wayne or Eminem could be the "King of Whatever the Fuck You Wanna Call This Shit"
 
-![22886046\_10210378502595963\_2062489342529160391\_n](__GHOST_URL__/content/images/2017/12/22886046_10210378502595963_2062489342529160391_n.jpg)
+![22886046\_10210378502595963\_2062489342529160391\_n](__BLOG_URL__/content/images/2017/12/22886046_10210378502595963_2062489342529160391_n.jpg)
 
 ## 55 - Electric Ladyland by Jimi Hendrix
 

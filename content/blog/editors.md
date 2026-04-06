@@ -162,4 +162,4 @@ WYSIWYG editor from Google... Not for professional development
 
 ## Conclusion
 
-I just hope that this helps someone out there. If you are looking to further improve your development process be sure to check out my pet project (and personal dotfile repo) [dock](__GHOST_URL__/dock). Happy Coding!
+I just hope that this helps someone out there. Happy Coding!

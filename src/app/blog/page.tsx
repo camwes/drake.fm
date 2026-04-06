@@ -16,8 +16,7 @@ export default async function BlogPage() {
             Notes, stories, and map-side writing.
           </h1>
           <p className="mt-5 text-lg leading-8 text-[#f2d4b0]">
-            Imported posts from your Ghost export, now rendered from local markdown
-            files.
+            Markdown-backed posts with wikilinks, backlinks, and static page builds.
           </p>
         </div>
 

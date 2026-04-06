@@ -10,6 +10,8 @@ draft: true
 ---
 [ES6 features](http://adrianmejia.com/blog/2016/10/19/Overview-of-JavaScript-ES6-features-a-k-a-ECMAScript-6-and-ES2015/#.WA4G-3dZebs.hackernews)
 
+Related reading: [[style-guide|Building Websites]], [[whiteboard|Whiteboard]], and [[editors|State of Text Editors (2015)]].
+
 Many people complain about the way that Javascript functions because using it effectively depends on a real understanding of some key concepts. Rather than bitch and moan about the nature of Javascript I will emulate my homie Crockford and focus on "The Good Parts".
 
 *   Fundamentals
@@ -391,7 +393,7 @@ That your program works does not mean that your job as programmer is complete. Y
 *   **Always** Declare with Var [3](http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml?showone=var#var)
 *   **No** Function Declarations Within Blocks
 
-> Need Help Choosing an Editor? [Read My Review](__GHOST_URL__/blog/editors)!
+> Need Help Choosing an Editor? [[editors|Read my review]]!
 
 ### Miscellaneous
 

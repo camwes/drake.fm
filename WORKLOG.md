@@ -37,10 +37,10 @@ Blog content is stored outside the app code in:
 
 - `content/blog`
 
-Import source status:
+Content source:
 
-- the original Ghost export file has been removed from the public repo
-- imported markdown posts remain under `content/blog`
+- blog posts live in `content/blog`
+- posts are authored and maintained as local markdown files
 
 Important blog implementation files:
 
@@ -67,8 +67,7 @@ Markdown rendering:
 
 Footnotes:
 
-- imported Ghost posts did not use true GFM footnotes
-- `src/lib/blog.ts` normalizes legacy Ghost-style footnote anchors so the footnote number links and return links work again
+- `src/lib/blog.ts` normalizes legacy footnote anchors so the footnote number links and return links work again when older posts still use them
 
 Drafts:
 
@@ -77,13 +76,22 @@ Drafts:
 - drafts are excluded from production builds
 - current draft post is `content/blog/js.md` (`Learning Javascript`)
 
-Internal Ghost links:
+Internal placeholder links:
 
-- `__GHOST_URL__` is normalized to `/blog`
+- `__BLOG_URL__` is normalized to `/blog`
+
+Wikilinks and note graph behavior:
+
+- the blog now supports Obsidian-style wikilinks in markdown
+- supported forms are `[[slug]]`, `[[Title]]`, and `[[target|Label]]`
+- wikilinks resolve by slug first, then normalized slug, then title and `aliases`
+- posts can define optional `aliases` and `tags` frontmatter
+- backlinks are derived automatically and rendered on each post page
+- invalid wikilinks are shown as warnings in development and fail production builds
 
 Known content caveat:
 
-- some imported posts may still contain legacy image or old Ghost asset paths that may need manual cleanup later
+- some posts still reference external image paths that may need manual cleanup later
 
 ## Navigation
 
@@ -163,7 +171,7 @@ Reason:
 
 ## Likely Next Good Steps
 
-- clean up old Ghost image URLs in imported blog posts
+- clean up older external image URLs in blog posts
 - refine the map marker styling if an even subtler travel indicator is desired
 - improve the `Drake` badge styling to feel even closer to Drake Hotel signage
 - add richer blog index metadata like feature images or tags if wanted
