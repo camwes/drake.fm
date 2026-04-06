@@ -71,7 +71,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           ) : null}
         </header>
 
-        <article className="prose prose-invert mt-10 max-w-none prose-headings:text-[#fff4df] prose-p:text-white/80 prose-strong:text-white prose-a:text-[#f8d57e] prose-blockquote:border-l-[#f8d57e] prose-blockquote:text-[#f2d4b0] prose-code:text-[#f8d57e] prose-pre:border prose-pre:border-[#5d3827] prose-pre:bg-[#1a100d] prose-li:text-white/80 prose-hr:border-white/10">
+        <article className="prose prose-invert mt-10 max-w-none prose-headings:text-[#fff4df] prose-p:text-white/80 prose-strong:text-white prose-a:text-[#f8d57e] prose-blockquote:border-l-[#f8d57e] prose-blockquote:text-[#f2d4b0] prose-code:text-[#f8d57e] prose-pre:border prose-pre:border-[#5d3827] prose-pre:bg-[#1a100d] prose-li:text-white/80 prose-hr:border-white/10 prose-div:my-0 prose-div:max-w-none">
           <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
             {post.content}
           </ReactMarkdown>

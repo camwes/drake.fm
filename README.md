@@ -30,7 +30,7 @@ npm run build
 
 ## Blog Authoring
 
-The blog supports standard markdown links and Obsidian-style wikilinks.
+The blog supports standard markdown links, raw HTML blocks, and Obsidian-style wikilinks.
 
 Supported wikilink forms:
 
@@ -61,6 +61,24 @@ Notes:
 - invalid wikilinks fail production builds so the published note graph stays healthy
 - backlinks are rendered automatically at the bottom of each post
 - the legacy `__BLOG_URL__` placeholder is normalized to `/blog`
+- callouts should use raw HTML blocks instead of Obsidian callout syntax
+
+HTML callout example:
+
+```html
+<div class="callout callout-note">
+  <p class="callout-title">Note</p>
+  <p>Callout body content goes here.</p>
+</div>
+```
+
+Available callout classes:
+
+- `callout callout-note`
+- `callout callout-tip`
+- `callout callout-warning`
+- `callout callout-important`
+- `callout callout-caution`
 
 ## Deployment
 

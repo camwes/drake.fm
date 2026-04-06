@@ -63,7 +63,13 @@ Some commonly used HTML DOM events
 
 ## CSS
 
-#### Pre-processors: SASS v. LESS v. Stylus v. Compass
+* CSS-in-JS: [Styled Components](https://styled-components.com/)
+	* Adds Ability to use complex Javascript
+	* Styles, markup and scripts all in one file
+* CSS Modules
+	* locally scoped means prevents collisions while using the same class names
+
+#### (outdated) Pre-processors: SASS v. LESS v. Stylus v. Compass
 
 I personally prefer compass which is built on SASS because it is an excellent tool, with a great community. That being said there are many great options available.
 

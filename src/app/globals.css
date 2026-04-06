@@ -87,6 +87,16 @@ a {
   border-radius: 1rem;
 }
 
+.prose :where(a) {
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.16em;
+}
+
+.prose :where(a:hover) {
+  text-decoration-thickness: 0.12em;
+}
+
 .prose :where(table) {
   display: block;
   overflow-x: auto;
@@ -101,4 +111,46 @@ a {
 
 .prose :where(.footnotes p) {
   margin: 0;
+}
+
+.prose :where(.callout) {
+  margin: 1.5rem 0;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(122, 74, 43, 0.95);
+  background: rgba(26, 16, 13, 0.92);
+  padding: 1rem 1.25rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+.prose :where(.callout-title) {
+  margin: 0 0 0.75rem;
+  color: #fff4df;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.prose :where(.callout > :first-child),
+.prose :where(.callout-body > :first-child) {
+  margin-top: 0;
+}
+
+.prose :where(.callout > :last-child),
+.prose :where(.callout-body > :last-child) {
+  margin-bottom: 0;
+}
+
+.prose :where(.callout-tip) {
+  border-color: rgba(95, 143, 95, 0.95);
+  background: rgba(18, 32, 20, 0.92);
+}
+
+.prose :where(.callout-important) {
+  border-color: rgba(124, 91, 214, 0.95);
+  background: rgba(24, 18, 37, 0.92);
+}
+
+.prose :where(.callout-warning),
+.prose :where(.callout-caution) {
+  border-color: rgba(165, 106, 47, 0.95);
+  background: rgba(36, 22, 13, 0.92);
 }

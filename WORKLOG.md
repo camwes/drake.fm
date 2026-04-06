@@ -63,6 +63,7 @@ Markdown rendering:
 
 - posts render with `react-markdown`
 - `remark-gfm` is enabled
+- raw HTML in posts is enabled through `rehype-raw`
 - typography styles are enabled through Tailwind in `src/app/globals.css`
 
 Footnotes:
@@ -88,6 +89,12 @@ Wikilinks and note graph behavior:
 - posts can define optional `aliases` and `tags` frontmatter
 - backlinks are derived automatically and rendered on each post page
 - invalid wikilinks are shown as warnings in development and fail production builds
+
+Callouts:
+
+- posts should use raw HTML callout blocks instead of Obsidian-style callout syntax
+- callout styling lives in `src/app/globals.css`
+- supported classes include `callout-note`, `callout-tip`, `callout-warning`, `callout-important`, and `callout-caution`
 
 Known content caveat:
 
