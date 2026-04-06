@@ -12,6 +12,8 @@ featureImage: ''
   <p>Here's a great <a href="https://open.spotify.com/episode/1n4cIT5MUz4m4bu5kMedw1?si=LT8Ku7APQyaVun-dtSUaaQ">podcast</a> I found on the importance of writing in engineering.</p>
 </div>
 
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/episode/1n4cIT5MUz4m4bu5kMedw1?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
 ## Introduction
 The importance of having good documentation can hardly be overstated, yet many companies struggle to incorporate documentation into their process.[^1] In order to build an enduring and efficient organization, Burrow needs to adopt the Triple D mindset. No, I’m not talking about Guy Fieri’s Diners, Drive-ins and Dives. I’m talking about Documentation Driven Design. Simply put, **from the perspective of a user, if a feature is not documented, then it doesn't exist, and if a feature is documented incorrectly, then it's broken.**[^2] I’m going to break down the different types of docs, establish the benefits of having good docs, and finally suggest some tips for creating better docs.
 

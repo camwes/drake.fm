@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
   },
   basePath,
   assetPrefix: basePath,
+  turbopack: { root: process.cwd() },
 };
 
 export default nextConfig;
