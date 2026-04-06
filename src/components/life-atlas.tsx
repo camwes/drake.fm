@@ -111,6 +111,9 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
   }, [activeRoute, events, routeProgress, selectedEvent.id]);
 
   useEffect(() => {
+    // In Next dev, DeckGL + MapLibre can log a harmless luma.gl resize error
+    // before the WebGL device fully settles. Delaying mount by one frame avoids
+    // flashing during hydration, but the dev-only console noise may still appear.
     mapMountFrameRef.current = globalThis.requestAnimationFrame(() => {
       setIsMapReady(true);
       mapMountFrameRef.current = null;

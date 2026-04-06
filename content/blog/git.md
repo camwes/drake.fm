@@ -6,7 +6,7 @@ excerpt: >-
   As a beginner it can feel as if people are speaking Klingon when they start talking about branching and cherry picking.
 canonicalUrl: ''
 featureImage: 'https://drake-ghost.s3.amazonaws.com/2017/07/gitflow.png'
-draft: true
+draft: false
 ---
 When I first began seriously programming there were many instances in which I almost gave up for feelings of inadequacy. One hurdle to being a proficient developer that was particularly mind-numbing was grasping version control. As a beginner it can feel as if people are speaking Klingon when they start talking about branching and cherry picking. In reality, a developer only need know a few conventions of VCS (version control system) very well in order to use it effectively.
 
@@ -14,7 +14,7 @@ If you are starting out on a serious journey to become a developer, thoroughly u
 
 The purpose of this post is to get you to use Git effectively, and also serve as a personal scratchpad for useful commands. These are the commands that I use often. It is not meant to be complete, and the web has many great resources out there for learning git. Bookmark these:
 
-Related reading: [[ssh|SSH]], [[devops|Devops]], and [[dock|Dock]].
+Related reading: SSH, [[DevOps 1|Devops]], and [[dock|Dock]].
 
 ##### [Interactive Cheat Sheet](http://www.ndpsoftware.com/git-cheatsheet.html)
 
@@ -191,7 +191,7 @@ When you run git push, you typically push your current revisions to the github.c
 git push origin master
 ```
 
-**origin** refers to the **remote** and **master** refers to the **branch**. You can add your own remotes which allows you to do some cool stuff . One example I describe in detail in my [[devops|Devops]] post: creating a bare git repository on a linux server to deploy a web app. Once the set up is complete you run this command locally:
+**origin** refers to the **remote** and **master** refers to the **branch**. You can add your own remotes which allows you to do some cool stuff . One example I describe in detail in my [[DevOps 1|Devops]] post: creating a bare git repository on a linux server to deploy a web app. Once the set up is complete you run this command locally:
 
 ```git
 git remote add prod ssh://git@00.00.00.00/mysite.git  

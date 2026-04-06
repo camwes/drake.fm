@@ -6,11 +6,11 @@ excerpt: >-
   Writing good code starts with building a rich development environment using the best tools.
 canonicalUrl: ''
 featureImage: 'https://drake-ghost.s3.amazonaws.com/2017/07/dock.jpg'
-draft: true
+draft: false
 ---
 ## [Dock](https://github.com/camwes/dock) - Open Source Development Environment
 
-Related reading: [[editors|State of Text Editors (2015)]], [[git|Git]], [[ssh|SSH]], and [[devops|Devops]].
+Related reading: [[editors|State of Text Editors (2015)]], [[git|Git]], SSH, and [[DevOps 1|Devops]].
 
 Writing good code starts with building a rich [development environment](https://en.wikipedia.org/wiki/development_environment) using the best tools. When I began building websites I preferred an [IDE](https://en.wikipedia.org/wiki/Integrated_development_environment) (Adobe Dreamweaver, specifically) for the out-the-box functionality. My needs soon outgrew the Dreamweaver [GUI](https://en.wikipedia.org/wiki/Graphical_user_interface) and a friend of mine convinced me that to become a better programmer I should use the command line. So, I started along the path to learning linux. Today, I'm convinced that to maximize any dev environment intermediate knowledge of Linux is a sine qua non.
 
@@ -125,7 +125,7 @@ Similar to the development script above, this script is designed to build a prod
 *   Setting up Deploy Keys
 *   Create Git Repository for Deployment
 
-For the nitty gritty details on exactly what this script does, please refer to my previous [[devops|blog post]].
+For the nitty gritty details on exactly what this script does, please refer to my previous [[DevOps 1|blog post]].
 
 #### Notes:
 
@@ -139,7 +139,7 @@ For the nitty gritty details on exactly what this script does, please refer to m
 ./dock -n drake -u ohmlabs -r ohmlabs -b drake
 ```
 
-But getting the server set up isn't the end of server deployment. Since you are already clearly an expert at Git by now why not use git to improve your server deployment process? Git is actually an excellent tool for this, but requires a slightly more advanced usage of git and understanding of shell scripts. Chances are you need a little more information than that about how github deployment works, which is also in my [[devops|Devops]] post.
+But getting the server set up isn't the end of server deployment. Since you are already clearly an expert at Git by now why not use git to improve your server deployment process? Git is actually an excellent tool for this, but requires a slightly more advanced usage of git and understanding of shell scripts. Chances are you need a little more information than that about how github deployment works, which is also in my [[DevOps 1|Devops]] post.
 
 When you have completed installation you should have the following architecture in /home/git:
 
