@@ -7,14 +7,14 @@ A personal site built with Next.js, centered on a map-based life timeline and a 
 Run the development server:
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 Run verification:
 
 ```bash
-npm run lint
-npm run build
+pnpm run lint
+pnpm run build
 ```
 
 ## Project Structure
@@ -94,8 +94,8 @@ This site is live as a public site. Treat everything committed here as publicly 
 To deploy a new version of the site:
 
 1. Run verification locally:
-   - `npm run lint`
-   - `npm run build`
+   - `pnpm run lint`
+   - `pnpm run build`
 2. Commit your changes.
 3. Push to `main`.
 4. GitHub Actions runs `.github/workflows/deploy-pages.yml`.
@@ -104,8 +104,8 @@ To deploy a new version of the site:
 Typical commands:
 
 ```bash
-npm run lint
-npm run build
+pnpm run lint
+pnpm run build
 git add .
 git commit -m "your message"
 git push origin main
@@ -119,8 +119,8 @@ After pushing:
 
 Important:
 
-- `npm run lint` alone is not enough to guarantee a successful deploy
-- `npm run build` catches type and Next.js build issues that can still fail in GitHub Actions
+- `pnpm run lint` alone is not enough to guarantee a successful deploy
+- `pnpm run build` catches type and Next.js build issues that can still fail in GitHub Actions
 
 GitHub-side requirements:
 
@@ -157,7 +157,7 @@ Pre-push checklist:
 1. Run `git status --short` and review every changed file.
 2. Review diffs for `public/`, `content/blog`, and `src/data/life-events.ts`.
 3. Confirm no secrets or exported source material were added.
-4. Run `npm run lint` and `npm run build`.
+4. Run `pnpm run lint` and `pnpm run build`.
 5. Update `README.md` and `WORKLOG.md` if public behavior, deployment, or content sourcing changed.
 
 ## Documentation Maintenance

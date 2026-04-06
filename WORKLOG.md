@@ -187,8 +187,8 @@ Reason:
 
 At the current stopping point, the app was passing:
 
-- `npm run lint`
-- `npm run build`
+- `pnpm run lint`
+- `pnpm run build`
 
 ## Hosting Notes
 
@@ -199,13 +199,14 @@ GitHub Pages deployment is active.
 
 Current status:
 
-- app currently builds successfully with `next build`
+- app currently builds successfully with `pnpm run build`
 - `next.config.ts` is now configured for static export
 - GitHub Pages uses static export because there is no Node server runtime there
 - project now includes a Pages workflow at `.github/workflows/deploy-pages.yml`
 - current config assumes GitHub Actions deployment to a project Pages URL and derives `basePath` / `assetPrefix` from `GITHUB_REPOSITORY`
 - `trailingSlash: true` is enabled for friendlier static hosting on GitHub Pages
 - the site is now live as a public site, so repo contents must be treated as public-by-default
+- the Pages workflow installs dependencies with `pnpm install --frozen-lockfile`
 
 ## Public Site Safety Rules
 
@@ -247,8 +248,8 @@ Likely GitHub Pages plan:
 
 3. Add a GitHub Actions workflow
    - install deps in `projects/drake-life-map`
-   - run `npm ci`
-   - run `npm run build`
+   - run `pnpm install --frozen-lockfile`
+   - run `pnpm run build`
    - upload the generated `out` directory as the Pages artifact
    - deploy using `actions/deploy-pages`
 
