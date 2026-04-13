@@ -43,6 +43,12 @@ The **Documentation Driven Design** post from 2022 captures the philosophy shift
 
 ## Chapter 4: The AI Turn (2025–2026)
 
+> keep a strict rule: human writes the vault. agents read it, suggest, execute.
+> [...]
+> understand this:markdown files are the oxygen of llms.
+> - Greg Isenberg ([tweet](https://x.com/gregisenberg/status/2026036464287412412?s=20))
+
+
 The biggest shift in the history of dock isn't in the scripts — it's in what the engineer's job has become.
 
 The "Good Vibes" note captures the reframe: AI is a lateral escalator. You can use it to go somewhere faster, or you can use it as a substitute for walking. The distinction matters. The job isn't gone; it's changed. You're no longer primarily *developing* — you're *composing*. Composing repeatable skills. Composing agents that can act on your behalf. Composing a system where the environment multiplies you more than any single tool ever did.
@@ -55,10 +61,20 @@ That's what dock is now becoming. Not just a provisioner, but a **stage manager*
 
 The **Agent Blueprint** lays out the architecture: a persistent agent brain in `lib/agent/`, living as markdown files, following a Read-Act-Reflect lifecycle. No database. No infrastructure costs at Phase 1. Just files, updated at the end of every session, keeping the agent informed of the world state.
 
+### The First Agent
+
+The Agent Blueprint describes a pattern. The Chief of Staff is where the pattern becomes a thing that runs.
+
+The idea is straightforward: an agent that wakes at 7am, checks your calendar, tasks, and inbox, and has a brief in your email by 7:20. It tracks which tasks keep getting bumped — not just noting them as overdue, but escalating. First time: "overdue since Tuesday." Third time: "this has been overdue across three briefings. Complete it, delete it, or put it on a someday list." It watches which newsletters you always archive without reading and periodically asks if you want to unsubscribe. Small things, but the kind of small things that compound.
+
+What makes it feel different from a dashboard is the memory. Every run writes to a JOURNAL. Preferences accumulate in RECOLLECTIONS. The tracking files persist. Next week's briefing knows what last week's briefing saw. This is the Read-Act-Reflect loop made concrete: not a stateless API call, but an agent that builds context over time.
+
+The implementation is deliberately unglamorous: a Python script, a few Google API integrations, Chrome's local bookmarks file, and a cron job. No vector database. No hosted infrastructure. The whole thing runs from the same repo that used to just provision a Mac. That's the point — the environment that multiplied you is still the environment, it's just doing more.
+
 ---
 
 ## The Thread
 
-Looking at it end to end: a scratchpad of notes became a provisioning tool became a deployment framework became a simplified personal site stack became an AI agent harness. The technology changed completely at every turn. The underlying question never did: *how do you build an environment that multiplies what you can do?*
+Looking at it end to end: a scratchpad of notes became a provisioning tool became a deployment framework became a simplified personal site stack became an AI agent harness became an agent that acts. The technology changed completely at every turn. The underlying question never did: *how do you build an environment that multiplies what you can do?*
 
 The answer keeps getting weirder and more interesting.
