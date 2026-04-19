@@ -11,6 +11,8 @@ type SiteShellProps = {
 const NAV_ITEMS = [
   { href: "/", label: "Home" },
   { href: "/blog", label: "Blog" },
+  { href: "/running", label: "Running" },
+  { href: "/chess", label: "Chess" },
 ];
 
 export function SiteShell({ children }: Readonly<SiteShellProps>) {
