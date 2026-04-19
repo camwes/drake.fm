@@ -2,9 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ScatterplotLayer } from "@deck.gl/layers";
+import { HeatmapLayer } from "@deck.gl/aggregation-layers";
 import { DeckGL } from "@deck.gl/react";
 import { FlyToInterpolator, type PickingInfo } from "@deck.gl/core";
 import Map from "react-map-gl/maplibre";
+import runningHeatmapData from "@/data/running-heatmap.json";
 import { FocusCard } from "@/components/focus-card";
 import type { LifeEvent } from "@/data/life-events";
 import {
@@ -59,6 +61,22 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
   };
 
   const layers = useMemo(() => {
+    const heatmap = new HeatmapLayer<[number, number]>({
+      id: "running-heatmap",
+      data: runningHeatmapData as [number, number][],
+      getPosition: (d) => d,
+      getWeight: 1,
+      radiusPixels: 25,
+      intensity: 1.2,
+      threshold: 0.03,
+      colorRange: [
+        [252, 100, 25, 30],
+        [252, 140, 30, 120],
+        [252, 200, 50, 200],
+        [255, 240, 100, 240],
+      ],
+    });
+
     const points = new ScatterplotLayer<LifeEvent>({
       id: "life-events",
       data: events,
@@ -85,7 +103,7 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
     });
 
     if (!activeRoute) {
-      return [points];
+      return [heatmap, points];
     }
 
     const pulsePoints = buildRoutePulsePoints(activeRoute, routeProgress);
@@ -107,7 +125,7 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
       },
     });
 
-    return [marker, points];
+    return [heatmap, marker, points];
   }, [activeRoute, events, routeProgress, selectedEvent.id]);
 
   useEffect(() => {

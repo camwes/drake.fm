@@ -17,6 +17,27 @@ pnpm run build
 
 `pnpm run lint` alone is not sufficient — always run `pnpm run build` before pushing. It catches type and Next.js build issues that lint misses.
 
+## Running Heatmap
+
+The life atlas map displays a Strava running heatmap generated from your activity data.
+
+**One-time setup** — create `~/.config/running-coach/home_location.json` with your home coordinates and desired clip radius:
+
+```json
+{ "lat": 37.7551, "lng": -122.4307, "clip_radius_km": 0.8 }
+```
+
+Points within `clip_radius_km` of home are stripped before the data is committed to keep your home location private.
+
+**Regenerate after new runs:**
+
+```bash
+cd ~/dock
+/home/cdrake/dock/virtualenvs/running-coach/bin/python lib/agent/running-coach/tools/export_heatmap.py
+```
+
+Then commit `src/data/running-heatmap.json` and push. The heatmap data is baked into the static build — no runtime Strava auth needed.
+
 ## Project Structure
 
 - `src/app/` — app routes

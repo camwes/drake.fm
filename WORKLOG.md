@@ -176,6 +176,27 @@ Reason:
 
 - they either changed the feel of the animation too much or caused rendering / visibility issues
 
+## Running Heatmap
+
+A Strava running heatmap is rendered on the life atlas map using Deck.gl's `HeatmapLayer`.
+
+Data pipeline:
+- `~/dock/lib/agent/running-coach/tools/export_heatmap.py` fetches all run activity polylines from Strava via the existing OAuth token, decodes them, clips a privacy radius around home, and writes `src/data/running-heatmap.json`
+- The JSON is a flat `[[lng, lat], ...]` array baked into the static build — no runtime auth required
+- `@deck.gl/aggregation-layers` added as a dependency for `HeatmapLayer`
+
+Privacy config at `~/.config/running-coach/home_location.json` (not committed):
+```json
+{ "lat": 37.7551, "lng": -122.4307, "clip_radius_km": 0.8 }
+```
+
+To refresh after new runs:
+```bash
+cd ~/dock
+/home/cdrake/dock/virtualenvs/running-coach/bin/python lib/agent/running-coach/tools/export_heatmap.py
+# commit src/data/running-heatmap.json and push
+```
+
 ## Likely Next Good Steps
 
 - clean up older external image URLs in blog posts
