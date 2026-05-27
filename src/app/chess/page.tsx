@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function ChessPage() {
   return (
-    <main className="min-h-screen bg-[#120b0a] text-white lg:h-screen lg:overflow-hidden">
+    <main className="min-h-screen bg-bg text-fg lg:h-screen lg:overflow-hidden">
       <div className="min-h-screen lg:h-full">
         <ChessGames />
       </div>

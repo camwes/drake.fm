@@ -3,9 +3,15 @@
 import { useCallback, useEffect, useState } from "react";
 import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
+import { useTheme } from "@drake/ui";
 
 const USERNAME = "cdrake757";
 const API_URL = `https://api.chess.com/pub/player/${USERNAME}/games`;
+
+const BOARD_COLORS = {
+  dark: { light: "#c4956a", dark: "#3d2410" },
+  light: { light: "#e8d4b0", dark: "#8b5c39" },
+} as const;
 
 type DailyGame = {
   url: string;
@@ -60,6 +66,8 @@ function gameId(game: DailyGame): string {
 }
 
 export function ChessGames() {
+  const { theme } = useTheme();
+  const boardColors = BOARD_COLORS[theme];
   const [games, setGames] = useState<DailyGame[]>([]);
   const [status, setStatus] = useState<"loading" | "error" | "ready" | "empty">("loading");
   const [selectedUrl, setSelectedUrl] = useState<string>("");
@@ -121,21 +129,21 @@ export function ChessGames() {
   return (
     <section className="grid min-h-screen grid-cols-1 gap-0 lg:h-full lg:min-h-0 lg:grid-cols-[minmax(0,1fr)_360px]">
       {/* Board area */}
-      <div className="relative flex flex-col items-center justify-center border-b border-[#5d3827] bg-[#120c0b] px-4 py-8 lg:min-h-0 lg:border-b-0 lg:border-r lg:px-10 lg:py-10">
+      <div className="relative flex flex-col items-center justify-center border-b border-warm-soft bg-bg px-4 py-8 lg:min-h-0 lg:border-b-0 lg:border-r lg:px-10 lg:py-10">
         {status === "loading" && (
           <div className="flex h-full w-full items-center justify-center">
-            <div className="aspect-square w-full max-w-[540px] animate-pulse rounded-2xl bg-[#1a100d]" />
+            <div className="aspect-square w-full max-w-[540px] animate-pulse rounded-2xl bg-surface-deep" />
           </div>
         )}
 
         {status === "error" && (
           <div className="flex flex-col items-center gap-4 text-center">
-            <p className="text-white/60">Couldn&apos;t load games.</p>
+            <p className="text-[var(--c-muted-6)]">Couldn&apos;t load games.</p>
             <a
               href={`https://www.chess.com/member/${USERNAME}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-2xl border border-[#7a4a2b] bg-[#2a1812] px-5 py-3 text-sm text-[#f8d57e] transition hover:bg-[#3a2119]"
+              className="rounded-2xl border border-warm bg-surface px-5 py-3 text-sm text-accent transition hover:bg-surface-hi"
             >
               Open chess.com profile ↗
             </a>
@@ -144,12 +152,12 @@ export function ChessGames() {
 
         {status === "empty" && (
           <div className="flex flex-col items-center gap-4 text-center">
-            <p className="text-white/60">No active daily games.</p>
+            <p className="text-[var(--c-muted-6)]">No active daily games.</p>
             <a
               href="https://www.chess.com/play/online"
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-2xl border border-[#7a4a2b] bg-[#2a1812] px-5 py-3 text-sm text-[#f8d57e] transition hover:bg-[#3a2119]"
+              className="rounded-2xl border border-warm bg-surface px-5 py-3 text-sm text-accent transition hover:bg-surface-hi"
             >
               Start a game ↗
             </a>
@@ -164,18 +172,18 @@ export function ChessGames() {
                   position: explorationFen,
                   onPieceDrop: handlePieceDrop,
                   boardOrientation: myColor(selectedGame),
-                  darkSquareStyle: { backgroundColor: "#3d2410" },
-                  lightSquareStyle: { backgroundColor: "#c4956a" },
+                  darkSquareStyle: { backgroundColor: boardColors.dark },
+                  lightSquareStyle: { backgroundColor: boardColors.light },
                   boardStyle: {
                     borderRadius: "0.75rem",
-                    boxShadow: "0 24px 80px rgba(0,0,0,0.5)",
+                    boxShadow: "var(--c-shadow-strong)",
                   },
                 }}
               />
             </div>
 
             <div className="mt-5 flex w-full max-w-[540px] items-center justify-between gap-3">
-              <div className="text-xs text-white/35">
+              <div className="text-xs text-[var(--c-muted-5)]">
                 {isExploring ? "Exploring · not submitted to chess.com" : "Drag pieces to explore moves"}
               </div>
               <div className="flex gap-2">
@@ -183,7 +191,7 @@ export function ChessGames() {
                   <button
                     type="button"
                     onClick={resetPosition}
-                    className="rounded-xl border border-[#7a4a2b] bg-[#2a1812] px-4 py-2 text-xs text-white/70 transition hover:bg-[#3a2119] hover:text-white"
+                    className="rounded-xl border border-warm bg-surface px-4 py-2 text-xs text-[var(--c-muted-9)] transition hover:bg-surface-hi hover:text-fg"
                   >
                     Reset
                   </button>
@@ -192,7 +200,7 @@ export function ChessGames() {
                   href={selectedGame.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-xl border border-[#7a4a2b] bg-[#2a1812] px-4 py-2 text-xs text-[#f8d57e] transition hover:bg-[#3a2119]"
+                  className="rounded-xl border border-warm bg-surface px-4 py-2 text-xs text-accent transition hover:bg-surface-hi"
                 >
                   Play on chess.com ↗
                 </a>
@@ -203,10 +211,10 @@ export function ChessGames() {
       </div>
 
       {/* Sidebar */}
-      <aside className="flex min-h-0 flex-col bg-[#130d0c] lg:max-h-screen">
-        <div className="border-b border-white/10 px-6 py-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#f8d57e]">Chess</p>
-          <p className="mt-2 text-sm text-white/60">
+      <aside className="flex min-h-0 flex-col bg-surface-card lg:max-h-screen">
+        <div className="border-b border-[var(--c-muted-3)] px-6 py-5">
+          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-accent">Chess</p>
+          <p className="mt-2 text-sm text-[var(--c-muted-6)]">
             {status === "ready"
               ? `${games.length} active daily game${games.length !== 1 ? "s" : ""}`
               : "Active daily games"}
@@ -219,11 +227,11 @@ export function ChessGames() {
               {[1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className="animate-pulse rounded-2xl border border-white/8 bg-white/4 p-4"
+                  className="animate-pulse rounded-2xl border border-[var(--c-muted-2)] bg-[var(--c-muted-1)] p-4"
                   style={{ opacity: 1 - i * 0.2 }}
                 >
-                  <div className="mb-3 h-3 w-1/3 rounded bg-white/10" />
-                  <div className="h-4 w-2/3 rounded bg-white/10" />
+                  <div className="mb-3 h-3 w-1/3 rounded bg-[var(--c-muted-3)]" />
+                  <div className="h-4 w-2/3 rounded bg-[var(--c-muted-3)]" />
                 </div>
               ))}
             </div>
@@ -244,8 +252,8 @@ export function ChessGames() {
                     onClick={() => selectGame(game)}
                     className={`relative w-full rounded-2xl border p-4 text-left transition ${
                       isSelected
-                        ? "border-[#f8d57e] bg-[#2a1812] shadow-[0_0_0_1px_rgba(248,213,126,0.35)]"
-                        : "border-white/8 bg-white/4 hover:border-white/20 hover:bg-white/8"
+                        ? "border-accent bg-surface shadow-[0_0_0_1px_var(--c-accent-ring)]"
+                        : "border-[var(--c-muted-2)] bg-[var(--c-muted-1)] hover:border-[var(--c-muted-4)] hover:bg-[var(--c-muted-2)]"
                     }`}
                   >
                     <div className="flex items-start justify-between gap-3">
@@ -254,20 +262,20 @@ export function ChessGames() {
                           className="mt-0.5 h-3 w-3 shrink-0 rounded-full border-2"
                           style={{
                             backgroundColor: color === "white" ? "#f5f0e8" : "#1a100d",
-                            borderColor: color === "white" ? "#c4956a" : "#7a4a2b",
+                            borderColor: color === "white" ? "var(--c-chess-light-square)" : "var(--c-border-warm)",
                           }}
                         />
                         <div>
-                          <p className="text-sm font-medium text-white">{opp.username}</p>
-                          {opp.rating && <p className="text-xs text-white/45">{opp.rating} rating</p>}
+                          <p className="text-sm font-medium text-fg">{opp.username}</p>
+                          {opp.rating && <p className="text-xs text-[var(--c-muted-6)]">{opp.rating} rating</p>}
                         </div>
                       </div>
 
                       <span
                         className={`shrink-0 rounded-lg px-2 py-1 text-xs font-medium ${
                           isMine
-                            ? "bg-[#f8d57e]/15 text-[#f8d57e]"
-                            : "bg-white/6 text-white/40"
+                            ? "bg-[color-mix(in_srgb,var(--c-accent)_15%,transparent)] text-accent"
+                            : "bg-[var(--c-muted-2)] text-[var(--c-muted-6)]"
                         }`}
                       >
                         {isMine ? "Your turn" : "Waiting"}
@@ -275,7 +283,7 @@ export function ChessGames() {
                     </div>
 
                     {isMine && (
-                      <p className="mt-2 text-xs text-white/35">
+                      <p className="mt-2 text-xs text-[var(--c-muted-5)]">
                         Move by {formatDeadline(game.move_by)}
                       </p>
                     )}

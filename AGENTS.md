@@ -4,24 +4,28 @@ Keep repository documentation current when behavior changes. If you change deplo
 
 - **Framework:** Next.js (static export mode), React 19, TypeScript 5, Tailwind CSS 4
 - **Deployment:** GitHub Actions → GitHub Pages (triggered on push to `main`)
+- **Workspace:** drake.fm lives inside the dock pnpm monorepo at `~/dock/` alongside `projects/dock-dash` (private agent dashboards). Shared chrome — theme tokens, `useTheme`, `ThemeToggle`, Geist fonts, MapLibre overrides — lives in `packages/drake-ui` and is imported as `@drake/ui`. Always run pnpm from the dock root (`pnpm -F drake-life-map dev` / `build`), not from inside `projects/drake-fm/`.
 - **Map:** MapLibre GL + Deck.gl + react-map-gl; primary feature is a full-screen life timeline map
 - **Blog:** Markdown files in `content/blog/` parsed with gray-matter; rendered via react-markdown
 
 **Key source layout:**
 - `src/app/` — Next.js app router pages
-- `src/components/` — React components (`life-atlas.tsx` is the core map component)
+- `src/components/` — React components (`life-atlas.tsx` is the core map component; `site-shell.tsx` is the drake.fm chrome — drawer, brand wordmark, nav). The theme hook + sun/moon toggle now come from `@drake/ui`, not from local files
 - `src/data/life-events.ts` — structured timeline entries with coordinates, zoom, era, colors
 - `src/lib/blog.ts` — blog loading, legacy placeholder normalization, wikilink/backlink data
 - `src/lib/life-atlas-utils.ts` — reusable map camera and route helpers
 - `content/blog/` — markdown blog posts (set `draft: true` in frontmatter to hide)
+- `src/app/globals.css` — drake.fm-specific styles + Tailwind 4 theme bindings. Shared tokens + maplibre overrides come from `@drake/ui/tokens.css` + `@drake/ui/maplibre.css`, imported at the top of this file
 
 ## Commands
 
 ```bash
-pnpm run dev     # Start local dev server
-pnpm run lint    # Run ESLint
-pnpm run build   # Build static export to /out
-pnpm start       # Serve production build
+# Always run from the dock repo root (~/dock/), not from inside this dir.
+pnpm install                    # Install workspace deps (drake-fm + dock-dash + @drake/ui)
+pnpm -F drake-life-map dev      # Start local dev server
+pnpm -F drake-life-map lint     # Run ESLint
+pnpm -F drake-life-map build    # Build static export to projects/drake-fm/out
+pnpm -F drake-life-map start    # Serve production build
 ```
 
 **Lint alone is not sufficient for deploy safety.** This project can pass `pnpm run lint` and still fail during the GitHub Pages build step. Always run `pnpm run build` after refactors, type-heavy changes, or new utility extraction before considering work complete.

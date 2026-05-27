@@ -1,86 +1,58 @@
 @import "tailwindcss";
 @import "maplibre-gl/dist/maplibre-gl.css";
+@import "@drake/ui/styles.css";
 @plugin "@tailwindcss/typography";
 
-:root {
-  --background: #120b0a;
-  --foreground: #fff4df;
-}
+/* Scan the shared @drake/ui package source so any utility classes it
+   references (ThemeToggle's `h-11 w-11`, etc.) make it into the build. */
+@source "../../../../packages/drake-ui/src";
 
+/* `@theme inline` has to live in the entry CSS file — Tailwind 4 only
+   picks it up when it's in the compiled scope, not from @import-ed
+   siblings. Shared resets and maplibre overrides still come from @drake/ui. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--c-bg);
+  --color-foreground: var(--c-fg);
+  --color-bg: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-surface-hi: var(--c-surface-hi);
+  --color-surface-deep: var(--c-surface-deep);
+  --color-surface-card: var(--c-surface-card);
+  --color-fg: var(--c-fg);
+  --color-fg-soft: var(--c-fg-soft);
+  --color-fg-warm: var(--c-fg-warm);
+  --color-fg-cream: var(--c-fg-cream);
+  --color-accent: var(--c-accent);
+  --color-accent-warm: var(--c-accent-warm);
+  --color-accent-soft: var(--c-accent-soft);
+  --color-accent-orange: var(--c-accent-orange);
+  --color-accent-orange-deep: var(--c-accent-orange-deep);
+  --color-warm: var(--c-border-warm);
+  --color-warm-soft: var(--c-border-warm-soft);
+  --color-warm-deep: var(--c-border-warm-deep);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--c-bg);
+  color: var(--c-fg);
   font-family: Arial, Helvetica, sans-serif;
   background-image:
-    radial-gradient(circle at top, rgba(181, 82, 38, 0.24), transparent 30%),
-    linear-gradient(180deg, #1b0f0c 0%, #120b0a 55%, #0d0908 100%);
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
+    radial-gradient(circle at top, var(--c-bg-radial), transparent 30%),
+    linear-gradient(180deg, var(--c-bg-gradient-1) 0%, var(--c-bg-gradient-2) 55%, var(--c-bg-gradient-3) 100%);
 }
 
 .drake-sign::before {
   content: "";
   position: absolute;
   inset: 14px;
-  border: 1px solid rgba(248, 213, 126, 0.5);
+  border: 1px solid var(--c-accent-glow);
   border-radius: 1.45rem;
   pointer-events: none;
   box-shadow:
-    0 0 24px rgba(248, 213, 126, 0.2),
-    inset 0 0 24px rgba(248, 213, 126, 0.08);
-}
-
-.maplibregl-popup-content,
-.deck-tooltip {
-  border-radius: 14px !important;
-  background: rgba(21, 11, 9, 0.95) !important;
-  border: 1px solid rgba(248, 213, 126, 0.25) !important;
-  color: #fff4df !important;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35) !important;
-}
-
-.maplibregl-ctrl-top-right,
-.maplibregl-ctrl-bottom-right,
-.maplibregl-ctrl-bottom-left {
-  z-index: 30;
-  pointer-events: auto;
-}
-
-.maplibregl-ctrl-group {
-  background: rgba(21, 11, 9, 0.9) !important;
-  border: 1px solid rgba(248, 213, 126, 0.25) !important;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35) !important;
-}
-
-.maplibregl-ctrl-group button {
-  color: #fff4df !important;
-}
-
-.maplibregl-ctrl-attrib {
-  background: rgba(21, 11, 9, 0.72) !important;
-  color: rgba(255, 244, 223, 0.78) !important;
-}
-
-.maplibregl-ctrl-attrib a {
-  color: inherit !important;
+    0 0 24px var(--c-accent-glow),
+    inset 0 0 24px var(--c-accent-ring);
 }
 
 .prose :where(img) {
@@ -105,7 +77,7 @@ a {
 
 .prose :where(.footnotes) {
   margin-top: 3rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid var(--c-muted-4);
   padding-top: 1.5rem;
 }
 
@@ -116,15 +88,15 @@ a {
 .prose :where(.callout) {
   margin: 1.5rem 0;
   border-radius: 1.5rem;
-  border: 1px solid rgba(122, 74, 43, 0.95);
-  background: rgba(26, 16, 13, 0.92);
+  border: 1px solid var(--c-border-warm);
+  background: var(--c-surface);
   padding: 1rem 1.25rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--c-shadow-soft);
 }
 
 .prose :where(.callout-title) {
   margin: 0 0 0.75rem;
-  color: #fff4df;
+  color: var(--c-fg);
   font-weight: 600;
   letter-spacing: 0.02em;
 }
@@ -140,17 +112,17 @@ a {
 }
 
 .prose :where(.callout-tip) {
-  border-color: rgba(95, 143, 95, 0.95);
-  background: rgba(18, 32, 20, 0.92);
+  border-color: color-mix(in srgb, #5f8f5f 60%, var(--c-border-warm));
+  background: color-mix(in srgb, #5f8f5f 8%, var(--c-surface));
 }
 
 .prose :where(.callout-important) {
-  border-color: rgba(124, 91, 214, 0.95);
-  background: rgba(24, 18, 37, 0.92);
+  border-color: color-mix(in srgb, #7c5bd6 60%, var(--c-border-warm));
+  background: color-mix(in srgb, #7c5bd6 8%, var(--c-surface));
 }
 
 .prose :where(.callout-warning),
 .prose :where(.callout-caution) {
-  border-color: rgba(165, 106, 47, 0.95);
-  background: rgba(36, 22, 13, 0.92);
+  border-color: color-mix(in srgb, #a56a2f 60%, var(--c-border-warm));
+  background: color-mix(in srgb, #a56a2f 8%, var(--c-surface));
 }

@@ -43,43 +43,43 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   return (
-    <main className="min-h-screen bg-[#120b0a] px-6 pb-16 pt-28 text-white lg:px-10">
+    <main className="min-h-screen bg-bg px-6 pb-16 pt-28 text-fg lg:px-10">
       <div className="mx-auto max-w-3xl">
         <Link
           href="/blog"
-          className="inline-flex rounded-full border border-[#7a4a2b] bg-[#2a1812] px-4 py-2 text-xs uppercase tracking-[0.24em] text-[#f4c77d] transition hover:bg-[#3a2119]"
+          className="inline-flex rounded-full border border-warm bg-surface px-4 py-2 text-xs uppercase tracking-[0.24em] text-fg-cream transition hover:bg-surface-hi"
         >
           Back to blog
         </Link>
 
-        <header className="mt-8 border-b border-white/10 pb-8">
-          <p className="text-xs uppercase tracking-[0.25em] text-[#f0b77f]">
+        <header className="mt-8 border-b border-[var(--c-muted-3)] pb-8">
+          <p className="text-xs uppercase tracking-[0.25em] text-accent-soft">
             {formatPostDate(post.date)}
           </p>
-          <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-[#fff4df] sm:text-5xl">
+          <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-fg sm:text-5xl">
             {post.title}
           </h1>
           {isDevelopment && post.draft ? (
             <div className="mt-4">
-              <span className="rounded-full border border-[#f8d57e] bg-[#2a1812] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#f8d57e]">
+              <span className="rounded-full border border-accent bg-surface px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-accent">
                 Dev Draft
               </span>
             </div>
           ) : null}
           {post.excerpt ? (
-            <p className="mt-5 text-lg leading-8 text-[#f2d4b0]">{post.excerpt}</p>
+            <p className="mt-5 text-lg leading-8 text-fg-soft">{post.excerpt}</p>
           ) : null}
         </header>
 
-        <article className="prose prose-invert mt-10 max-w-none prose-headings:text-[#fff4df] prose-p:text-white/80 prose-strong:text-white prose-a:text-[#f8d57e] prose-blockquote:border-l-[#f8d57e] prose-blockquote:text-[#f2d4b0] prose-code:text-[#f8d57e] prose-pre:border prose-pre:border-[#5d3827] prose-pre:bg-[#1a100d] prose-li:text-white/80 prose-hr:border-white/10 prose-div:my-0 prose-div:max-w-none">
+        <article className="prose mt-10 max-w-none prose-headings:text-[var(--c-fg)] prose-p:text-[var(--c-muted-9)] prose-strong:text-[var(--c-fg)] prose-a:text-[var(--c-accent)] prose-blockquote:border-l-[var(--c-accent)] prose-blockquote:text-[var(--c-fg-soft)] prose-code:text-[var(--c-accent)] prose-pre:border prose-pre:border-[var(--c-border-warm-soft)] prose-pre:bg-[var(--c-surface-deep)] prose-li:text-[var(--c-muted-9)] prose-hr:border-[var(--c-muted-3)] prose-div:my-0 prose-div:max-w-none">
           <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
             {post.content}
           </ReactMarkdown>
         </article>
 
         {post.backlinks.length > 0 ? (
-          <section className="mt-12 rounded-[2rem] border border-[#5d3827] bg-[#1a100d] p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#f8d57e]">
+          <section className="mt-12 rounded-[2rem] border border-warm-soft bg-surface-deep p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">
               Linked From
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
@@ -87,7 +87,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <Link
                   key={backlink.slug}
                   href={backlink.href}
-                  className="rounded-full border border-[#7a4a2b] bg-[#2a1812] px-4 py-2 text-sm text-[#f2d4b0] transition hover:bg-[#3a2119]"
+                  className="rounded-full border border-warm bg-surface px-4 py-2 text-sm text-fg-soft transition hover:bg-surface-hi"
                 >
                   {backlink.title}
                 </Link>
@@ -97,14 +97,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         ) : null}
 
         {isDevelopment && post.wikilinkIssues.length > 0 ? (
-          <section className="mt-6 rounded-[2rem] border border-[#8b5c39] bg-[#24130d] p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#f8d57e]">
+          <section className="mt-6 rounded-[2rem] border border-warm-deep bg-surface-deep p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">
               Wikilink Warnings
             </p>
-            <ul className="mt-4 space-y-2 text-sm leading-6 text-[#f2d4b0]">
+            <ul className="mt-4 space-y-2 text-sm leading-6 text-fg-soft">
               {post.wikilinkIssues.map((issue) => (
                 <li key={`${issue.target}-${issue.message}`}>
-                  <code className="text-[#f8d57e]">{issue.target}</code>: {issue.message}
+                  <code className="text-accent">{issue.target}</code>: {issue.message}
                 </li>
               ))}
             </ul>

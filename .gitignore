@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local-only observability dashboard (symlinked from ~/dock/dashboards/).
+# Private — never ship to production. Browse at localhost:3000/dashboard.html.
+/public/dashboard.html
+/public/agent-observability.md

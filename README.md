@@ -1,21 +1,23 @@
 # Drake.fm
 
-A personal site built with Next.js, centered on a map-based life timeline and a markdown-backed blog.
+A personal site built with Next.js, centered on a map-based life timeline and a markdown-backed blog. Lives inside the dock pnpm monorepo at `~/dock/projects/drake-fm/`, alongside the private `dock-dash` dashboards. Shared chrome lives in `packages/drake-ui` (`@drake/ui`).
 
 ## Local Development
 
 ```bash
-pnpm run dev
+# Run all pnpm commands from the dock repo root (~/dock/), not from this dir.
+pnpm install                  # one-time + after dep changes
+pnpm -F drake-life-map dev    # localhost:3000
 ```
 
 ## Verification
 
 ```bash
-pnpm run lint
-pnpm run build
+pnpm -F drake-life-map lint
+pnpm -F drake-life-map build
 ```
 
-`pnpm run lint` alone is not sufficient — always run `pnpm run build` before pushing. It catches type and Next.js build issues that lint misses.
+`pnpm run lint` alone is not sufficient — always run the build before pushing. It catches type and Next.js build issues that lint misses.
 
 ## Running Heatmap
 

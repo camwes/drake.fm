@@ -1,5 +1,23 @@
 # Drake.fm Worklog
 
+## Workspace layout
+
+drake-fm lives inside the dock pnpm monorepo at `~/dock/`. The workspace declares three packages:
+
+- `projects/drake-fm` — this site (public, GitHub Pages)
+- `projects/dock-dash` — private agent dashboards, local-only
+- `packages/drake-ui` — shared `@drake/ui` chrome (theme tokens, dark/light hook, Geist fonts, MapLibre overrides)
+
+drake-fm imports from `@drake/ui` instead of having local copies of `theme.ts` / `theme-toggle.tsx` / the token CSS block. Always run `pnpm` from the dock root (`pnpm -F drake-life-map dev` / `build`), not from inside this directory — workspace resolution depends on it. The GitHub Actions deploy still scopes to this package, so nothing about the workspace setup leaks into the public build.
+
+## Patched dependencies
+
+- `@luma.gl/core@9.3.3` — `patches/@luma.gl__core@9.3.3.patch` (at the **dock workspace root**, not under projects/drake-fm). Adds an optional-chain + `?? 16384` fallback in `CanvasSurface.getMaxDrawingBufferSize()`. Upstream race: `WebGLDevice` passes itself to `WebGLCanvasContext`/`CanvasSurface` mid-construction, so the ResizeObserver attached during `super(props)` can fire before `device.limits` is assigned. Without the patch this surfaces as `TypeError: Cannot read properties of undefined (reading 'maxTextureDimension2D')` in the Next dev overlay (also visible in production browsers). pnpm reapplies on every install via the `pnpm.patchedDependencies` key in the workspace-root `package.json` (which is required for workspace patches — keeping the entry in `projects/drake-fm/package.json` warns "ignored"). The 9.2.6 → 9.3.3 version bump came from pnpm reresolving when the workspace took over the lockfile.
+
+## Theme hydration
+
+`<html>` in `src/app/layout.tsx` carries `suppressHydrationWarning`. The inline `THEME_INIT_SCRIPT` (loaded from `src/lib/theme.ts`) sets `data-theme` on the `<html>` dataset before React hydrates; without the suppress attribute React reports the resulting mismatch as a top-level hydration error in dev. Standard Next.js pattern — mirrors `next-themes`.
+
 ## Current State
 
 This project is a Next.js 16 app with:
@@ -228,6 +246,10 @@ Current status:
 - `trailingSlash: true` is enabled for friendlier static hosting on GitHub Pages
 - the site is now live as a public site, so repo contents must be treated as public-by-default
 - the Pages workflow installs dependencies with `pnpm install --frozen-lockfile`
+
+### Local-only dashboard mount
+
+`public/dashboard.html` and `public/agent-observability.md` are **gitignored** symlinks pointing into `~/dock/dashboards/` so the agent observability HTML can be browsed at `localhost:3000/dashboard.html` while running `pnpm run dev`. They live at the public root (rather than under a `public/dashboard/` subdir) because Next.js's `public/` serving doesn't auto-resolve directory index files — `/dashboard/` would 404 in dev mode even with the symlink in place. The markdown sibling lives next to the HTML so the in-page footer link (`<a href="agent-observability.md">`) resolves cleanly. Both paths are excluded by `.gitignore` and are never present in a fresh clone, so they cannot be deployed to GitHub Pages even if a local `pnpm run build` bakes the resolved files into `out/`.
 
 ## Public Site Safety Rules
 

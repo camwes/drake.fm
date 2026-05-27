@@ -13,7 +13,7 @@ import {
   SHORT_ROUTE_DISTANCE_METERS,
   SHORT_ROUTE_DURATION,
   SHORT_ROUTE_LEAD_IN_DURATION,
-  MAP_STYLE,
+  mapStyleForTheme,
   EMPTY_EVENT,
   buildDirectViewState,
   buildDrivePath,
@@ -28,12 +28,20 @@ import {
   type LifeRoute,
   type RoutePulsePoint,
 } from "@/lib/life-atlas-utils";
+import { useTheme } from "@drake/ui";
 
 type LifeAtlasProps = {
   events: LifeEvent[];
 };
 
+const SELECTED_ACCENT_HEX = { dark: "#f8d57e", light: "#b07429" } as const;
+const ROUTE_PULSE_RGB = { dark: [248, 213, 126], light: [176, 116, 41] } as const;
+
 export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
+  const { theme } = useTheme();
+  const mapStyle = mapStyleForTheme(theme);
+  const selectedAccent = SELECTED_ACCENT_HEX[theme];
+  const routePulseRgb = ROUTE_PULSE_RGB[theme];
   const fallbackEvent = events.at(-1) ?? events[0] ?? EMPTY_EVENT;
   const [selectedId, setSelectedId] = useState(fallbackEvent?.id ?? "");
   const [isMapReady, setIsMapReady] = useState(false);
@@ -45,10 +53,13 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
   );
   const [activeRoute, setActiveRoute] = useState<LifeRoute | null>(null);
   const [routeProgress, setRouteProgress] = useState(1);
+  const [isHeatmapHidden, setIsHeatmapHidden] = useState(false);
+  const [heatmapVisible, setHeatmapVisible] = useState(false);
   const animationFrameRef = useRef<number | null>(null);
   const routeLeadInTimeoutRef = useRef<ReturnType<typeof globalThis.setTimeout> | null>(
     null,
   );
+  const heatmapTimerRef = useRef<ReturnType<typeof globalThis.setTimeout> | null>(null);
   const mapMountFrameRef = useRef<number | null>(null);
 
   const adjustZoom = (delta: number) => {
@@ -69,6 +80,7 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
       radiusPixels: 25,
       intensity: 1.2,
       threshold: 0.03,
+      visible: heatmapVisible && !isHeatmapHidden,
       colorRange: [
         [252, 100, 25, 30],
         [252, 140, 30, 120],
@@ -85,13 +97,13 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
       getPosition: (event) => event.coordinates,
       getRadius: (event) => (event.id === selectedEvent.id ? 16 : 11),
       getFillColor: (event) =>
-        hexToRgb(event.id === selectedEvent.id ? "#f8d57e" : event.accent),
+        hexToRgb(event.id === selectedEvent.id ? selectedAccent : event.accent),
       getLineColor: () => [255, 248, 230, 220],
       lineWidthUnits: "pixels",
       getLineWidth: (event) => (event.id === selectedEvent.id ? 3 : 2),
       updateTriggers: {
         getRadius: [selectedEvent.id],
-        getFillColor: [selectedEvent.id],
+        getFillColor: [selectedEvent.id, selectedAccent],
         getLineWidth: [selectedEvent.id],
       },
       onClick: (info: PickingInfo<LifeEvent>) => {
@@ -114,7 +126,7 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
       radiusUnits: "pixels",
       getPosition: (point) => point.coordinates,
       getRadius: (point) => point.radius,
-      getFillColor: (point) => [248, 213, 126, point.alpha],
+      getFillColor: (point) => [routePulseRgb[0], routePulseRgb[1], routePulseRgb[2], point.alpha],
       getLineColor: () => [255, 244, 223, 180],
       lineWidthUnits: "pixels",
       getLineWidth: 1,
@@ -126,7 +138,7 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
     });
 
     return [heatmap, marker, points];
-  }, [activeRoute, events, routeProgress, selectedEvent.id]);
+  }, [activeRoute, events, heatmapVisible, isHeatmapHidden, routeProgress, selectedAccent, routePulseRgb, selectedEvent.id]);
 
   useEffect(() => {
     // In Next dev, DeckGL + MapLibre can log a harmless luma.gl resize error
@@ -147,8 +159,20 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
       if (routeLeadInTimeoutRef.current !== null) {
         globalThis.clearTimeout(routeLeadInTimeoutRef.current);
       }
+      if (heatmapTimerRef.current !== null) {
+        globalThis.clearTimeout(heatmapTimerRef.current);
+      }
     };
   }, []);
+
+  const hideHeatmapFor = (duration: number) => {
+    if (heatmapTimerRef.current) globalThis.clearTimeout(heatmapTimerRef.current);
+    setIsHeatmapHidden(true);
+    heatmapTimerRef.current = globalThis.setTimeout(() => {
+      setIsHeatmapHidden(false);
+      heatmapTimerRef.current = null;
+    }, duration + 300);
+  };
 
   const stopRouteAnimation = useCallback(() => {
     if (animationFrameRef.current !== null) {
@@ -240,12 +264,15 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
           path: buildDrivePath(selectedEvent.id, event.id),
         };
 
+        hideHeatmapFor(SHORT_ROUTE_LEAD_IN_DURATION + SHORT_ROUTE_DURATION + 2000);
         startRouteAnimation(route, () => {
           setViewState(buildViewState(event));
         });
       } else {
         stopRouteAnimation();
-        setViewState(buildDirectViewState(selectedEvent, event));
+        const nextViewState = buildDirectViewState(selectedEvent, event);
+        hideHeatmapFor(nextViewState.transitionDuration ?? 3000);
+        setViewState(nextViewState);
       }
 
       setSelectedId(event.id);
@@ -255,7 +282,7 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
 
   return (
     <section className="grid min-h-screen grid-cols-1 gap-0 lg:h-full lg:min-h-0 lg:grid-cols-[minmax(0,1fr)_360px]">
-      <div className="relative flex flex-col border-b border-[#5d3827] bg-[#120c0b] shadow-[0_24px_80px_rgba(0,0,0,0.4)] lg:min-h-0 lg:border-b-0 lg:border-r">
+      <div className="relative flex flex-col border-b border-warm-soft bg-bg shadow-[var(--c-shadow-strong)] lg:min-h-0 lg:border-b-0 lg:border-r">
         <div className="relative min-h-[52vh] overflow-hidden sm:min-h-[60vh] lg:min-h-0 lg:flex-1">
           {isMapReady ? (
             <DeckGL
@@ -273,17 +300,17 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
                   : null
               }
             >
-              <Map mapStyle={MAP_STYLE} />
+              <Map mapStyle={mapStyle} />
             </DeckGL>
           ) : (
-            <div className="absolute inset-0 bg-[#120c0b]" aria-hidden="true" />
+            <div className="absolute inset-0 bg-bg" aria-hidden="true" />
           )}
 
-          <div className="absolute right-4 top-4 z-20 hidden flex-col overflow-hidden rounded-2xl border border-[#7a4a2b] bg-[#2a1812]/90 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur lg:flex">
+          <div className="absolute right-4 top-4 z-20 hidden flex-col overflow-hidden rounded-2xl border border-warm bg-surface/90 shadow-[var(--c-shadow-soft)] backdrop-blur lg:flex">
             <button
               type="button"
               onClick={() => adjustZoom(1)}
-              className="flex h-11 w-11 items-center justify-center border-b border-[#7a4a2b] text-xl font-semibold text-[#fff4df] transition hover:bg-[#3a2119]"
+              className="flex h-11 w-11 items-center justify-center border-b border-warm text-xl font-semibold text-fg transition hover:bg-surface-hi"
               aria-label="Zoom in"
             >
               +
@@ -291,23 +318,33 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
             <button
               type="button"
               onClick={() => adjustZoom(-1)}
-              className="flex h-11 w-11 items-center justify-center text-xl font-semibold text-[#fff4df] transition hover:bg-[#3a2119]"
+              className="flex h-11 w-11 items-center justify-center border-b border-warm text-xl font-semibold text-fg transition hover:bg-surface-hi"
               aria-label="Zoom out"
             >
               -
+            </button>
+            <button
+              type="button"
+              onClick={() => setHeatmapVisible((v) => !v)}
+              className={`flex h-11 w-11 items-center justify-center transition hover:bg-surface-hi ${heatmapVisible ? "text-accent-orange" : "text-[var(--c-muted-5)]"}`}
+              aria-label="Toggle running heatmap"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z" />
+              </svg>
             </button>
           </div>
 
           <FocusCard
             event={selectedEvent}
-            className="absolute inset-x-4 bottom-4 z-20 hidden max-w-2xl rounded-[1.75rem] border border-white/10 bg-black/45 p-5 backdrop-blur md:inset-x-6 md:bottom-6 md:p-6 lg:block"
+            className="absolute inset-x-4 bottom-4 z-20 hidden max-w-2xl rounded-[1.75rem] border border-[var(--c-muted-3)] bg-surface/75 p-5 backdrop-blur md:inset-x-6 md:bottom-6 md:p-6 lg:block"
           />
         </div>
 
-        <div className="border-t border-white/10 bg-[#130d0c] px-4 py-5 lg:hidden">
+        <div className="border-t border-[var(--c-muted-3)] bg-surface-card px-4 py-5 lg:hidden">
           <FocusCard
             event={selectedEvent}
-            className="rounded-[1.5rem] border border-white/10 bg-black/35 p-5"
+            className="rounded-[1.5rem] border border-[var(--c-muted-3)] bg-surface/60 p-5"
             headingClassName="text-2xl"
           />
         </div>
@@ -324,8 +361,8 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
               onClick={() => selectEvent(event)}
               className={`h-4 w-4 rounded-full border-2 transition ${
                 isSelected
-                  ? "border-[#f6cb79] bg-[#f8d57e] shadow-[0_0_20px_rgba(248,213,126,0.55)]"
-                  : "border-[#7a4a2b] bg-[#1a100d]/90 hover:border-[#f0b77f] hover:bg-[#2a1812]"
+                  ? "border-accent-warm bg-accent shadow-[0_0_20px_var(--c-accent-glow-strong)]"
+                  : "border-warm bg-surface-deep/90 hover:border-accent-soft hover:bg-surface"
               }`}
               aria-label={`Select ${event.title}`}
             />
@@ -333,19 +370,19 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
         })}
       </div>
 
-      <aside className="hidden min-h-0 flex-col bg-[#130d0c] lg:flex lg:max-h-screen">
-        <div className="border-b border-white/10 px-6 py-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#f8d57e]">
+      <aside className="hidden min-h-0 flex-col bg-surface-card lg:flex lg:max-h-screen">
+        <div className="border-b border-[var(--c-muted-3)] px-6 py-5">
+          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-accent">
             Timeline
           </p>
-          <p className="mt-2 text-sm text-white/60">
+          <p className="mt-2 text-sm text-[var(--c-muted-6)]">
             Select a chapter to move the map to that place.
           </p>
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6">
           <div className="relative pl-8">
-            <div className="absolute bottom-0 left-[0.6875rem] top-0 w-px bg-gradient-to-b from-[#f8d57e]/70 via-[#7a4a2b] to-transparent" />
+            <div className="absolute bottom-0 left-[0.6875rem] top-0 w-px bg-gradient-to-b from-[color-mix(in_srgb,var(--c-accent)_70%,transparent)] via-[var(--c-border-warm)] to-transparent" />
             <div className="space-y-2">
               {events.map((event) => {
               const isSelected = event.id === selectedEvent.id;
@@ -357,32 +394,32 @@ export function LifeAtlas({ events }: Readonly<LifeAtlasProps>) {
                   onClick={() => selectEvent(event)}
                   className={`relative w-full rounded-[1.5rem] border p-4 text-left transition ${
                     isSelected
-                      ? "border-[#f8d57e] bg-[#2a1812] shadow-[0_0_0_1px_rgba(248,213,126,0.35)]"
-                      : "border-white/8 bg-white/4 hover:border-white/20 hover:bg-white/8"
+                      ? "border-accent bg-surface shadow-[0_0_0_1px_var(--c-accent-ring)]"
+                      : "border-[var(--c-muted-2)] bg-[var(--c-muted-1)] hover:border-[var(--c-muted-4)] hover:bg-[var(--c-muted-2)]"
                   }`}
                 >
                   <span
                     className={`absolute left-[-2rem] top-6 h-5 w-5 rounded-full border-4 ${
                       isSelected
-                        ? "border-[#f6cb79] bg-[#f8d57e] shadow-[0_0_20px_rgba(248,213,126,0.55)]"
-                        : "border-[#3b241c] bg-[#1a100d]"
+                        ? "border-accent-warm bg-accent shadow-[0_0_20px_var(--c-accent-glow-strong)]"
+                        : "border-warm-deep bg-surface-deep"
                     }`}
                   />
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <p className="text-xs uppercase tracking-[0.28em] text-white/45">
+                      <p className="text-xs uppercase tracking-[0.28em] text-[var(--c-muted-6)]">
                         {event.era}
                       </p>
-                      <h3 className="mt-2 text-xl font-semibold text-white">
+                      <h3 className="mt-2 text-xl font-semibold text-fg">
                         {event.title}
                       </h3>
-                      <p className="mt-3 text-sm font-medium text-[#f5d4b5]">{event.city}</p>
+                      <p className="mt-3 text-sm font-medium text-fg-warm">{event.city}</p>
                     </div>
-                    <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-white/60">
+                    <span className="rounded-full border border-[var(--c-muted-3)] px-3 py-1 text-xs text-[var(--c-muted-6)]">
                       {event.year}
                     </span>
                   </div>
-                  <p className="mt-3 text-sm leading-6 text-white/70">{event.summary}</p>
+                  <p className="mt-3 text-sm leading-6 text-[var(--c-muted-9)]">{event.summary}</p>
                 </button>
               );
               })}

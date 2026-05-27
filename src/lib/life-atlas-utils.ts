@@ -36,8 +36,16 @@ export const INITIAL_VIEW_STATE: AtlasViewState = {
   bearing: -10,
 };
 
-export const MAP_STYLE =
+export const MAP_STYLE_DARK =
   "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
+export const MAP_STYLE_LIGHT =
+  "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json";
+/* Back-compat default. Prefer mapStyleForTheme(theme) in components. */
+export const MAP_STYLE = MAP_STYLE_DARK;
+
+export function mapStyleForTheme(theme: "light" | "dark"): string {
+  return theme === "light" ? MAP_STYLE_LIGHT : MAP_STYLE_DARK;
+}
 
 export const HIGHWAY_101_PATH: [number, number][] = [
   [-122.1699, 37.4305],

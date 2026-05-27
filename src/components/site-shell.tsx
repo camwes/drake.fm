@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { ThemeToggle } from "@drake/ui";
 
 type SiteShellProps = {
   children: React.ReactNode;
@@ -26,7 +27,7 @@ export function SiteShell({ children }: Readonly<SiteShellProps>) {
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#7a4a2b] bg-[#2a1812]/90 text-[#fff4df] shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur transition hover:bg-[#3a2119]"
+          className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-warm bg-surface/90 text-fg shadow-[var(--c-shadow-soft)] backdrop-blur transition hover:bg-surface-hi"
           aria-label="Open navigation menu"
           aria-expanded={isOpen}
           aria-controls="site-navigation-drawer"
@@ -40,15 +41,16 @@ export function SiteShell({ children }: Readonly<SiteShellProps>) {
         </button>
         <Link
           href="/"
-          className="pointer-events-auto rounded-full border border-[#7a4a2b] bg-[#2a1812]/90 px-5 py-2 text-[#f4c77d] shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur transition hover:bg-[#3a2119]"
+          className="pointer-events-auto rounded-full border border-warm bg-surface/90 px-5 py-2 text-fg-cream shadow-[var(--c-shadow-soft)] backdrop-blur transition hover:bg-surface-hi"
         >
           <span
-            className="block text-3xl leading-none tracking-[0.04em] text-[#f8d57e]"
+            className="block text-3xl leading-none tracking-[0.04em] text-accent"
             style={{ fontFamily: "var(--font-drake-wordmark)" }}
           >
             Drake
           </span>
         </Link>
+        <ThemeToggle />
       </div>
 
       {isOpen ? (
@@ -62,21 +64,21 @@ export function SiteShell({ children }: Readonly<SiteShellProps>) {
 
       <aside
         id="site-navigation-drawer"
-        className={`fixed left-0 top-0 z-50 flex h-full w-[320px] max-w-[85vw] flex-col border-r border-[#5d3827] bg-[#130d0c] shadow-[0_24px_80px_rgba(0,0,0,0.45)] transition-transform duration-300 ${
+        className={`fixed left-0 top-0 z-50 flex h-full w-[320px] max-w-[85vw] flex-col border-r border-warm-soft bg-surface-card shadow-[var(--c-shadow-strong)] transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         aria-hidden={!isOpen}
       >
-        <div className="flex items-center justify-between border-b border-white/10 px-6 py-5">
+        <div className="flex items-center justify-between border-b border-[var(--c-muted-3)] px-6 py-5">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#f8d57e]">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-accent">
               Drake.fm
             </p>
           </div>
           <button
             type="button"
             onClick={() => setIsOpen(false)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#7a4a2b] bg-[#2a1812] text-[#fff4df] transition hover:bg-[#3a2119]"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-warm bg-surface text-fg transition hover:bg-surface-hi"
             aria-label="Close navigation menu"
           >
             X
@@ -95,8 +97,8 @@ export function SiteShell({ children }: Readonly<SiteShellProps>) {
                   onClick={() => setIsOpen(false)}
                   className={`block rounded-2xl border px-4 py-4 text-sm transition ${
                     isActive
-                      ? "border-[#f8d57e] bg-[#2a1812] text-white shadow-[0_0_0_1px_rgba(248,213,126,0.35)]"
-                      : "border-white/8 bg-white/4 text-white/75 hover:border-white/20 hover:bg-white/8 hover:text-white"
+                      ? "border-accent bg-surface text-fg shadow-[0_0_0_1px_var(--c-accent-ring)]"
+                      : "border-[var(--c-muted-2)] bg-[var(--c-muted-1)] text-[var(--c-muted-9)] hover:border-[var(--c-muted-4)] hover:bg-[var(--c-muted-2)] hover:text-fg"
                   }`}
                 >
                   {item.label}
@@ -106,7 +108,7 @@ export function SiteShell({ children }: Readonly<SiteShellProps>) {
           </div>
         </nav>
 
-        <div className="border-t border-white/10 px-6 py-5 text-xs text-white/45">
+        <div className="border-t border-[var(--c-muted-3)] px-6 py-5 text-xs text-[var(--c-muted-6)]">
           <p>Copyright &copy; {currentYear} Cameron Drake</p>
           <p className="mt-1">All rights reserved.</p>
         </div>
