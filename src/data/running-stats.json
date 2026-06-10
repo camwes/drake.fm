@@ -1,0 +1,22 @@
+{
+  "stats": [
+    {
+      "label": "5K PR",
+      "value": "20:48",
+      "sub": "6:41/mi \u00b7 Feb 1, 2026",
+      "url": "https://www.strava.com/activities/17251948793"
+    },
+    {
+      "label": "Half PR",
+      "value": "1:49:43",
+      "sub": "8:22/mi \u00b7 Jan 25, 2026",
+      "url": "https://www.strava.com/activities/17177211639"
+    }
+  ],
+  "latestRace": {
+    "name": "Oakland 5K",
+    "time": "20:58",
+    "sub": "5K \u00b7 Mar 22, 2026",
+    "url": "https://www.strava.com/activities/17818826648"
+  }
+}

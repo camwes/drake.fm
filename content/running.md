@@ -18,4 +18,4 @@ The heatmap is where all of this happened: the Bay Trail between Foster City and
 the streets of San Francisco, the occasional park loop. Most of it looks the same
 from the outside — one foot in front of the other, early morning, orange glow on the bay.
 
-Working toward a half marathon. No target race yet — just stacking miles.
+Working toward a half marathon. The calendar is set: Napa to Sonoma in July, Rock 'n' Roll San Jose in October — two flat, fast NorCal halfs to chase a faster time on.

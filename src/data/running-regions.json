@@ -1,0 +1,9 @@
+{
+  "matchRadiusKm": 10,
+  "clusterThresholdKm": 15,
+  "seededOnly": true,
+  "seeds": [
+    { "id": "sf", "label": "San Francisco", "center": [-122.4845, 37.7694], "zoom": 13.5 },
+    { "id": "foster-city", "label": "Foster City", "center": [-122.2677, 37.563], "zoom": 13.5 }
+  ]
+}

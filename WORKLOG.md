@@ -199,20 +199,44 @@ Reason:
 A Strava running heatmap is rendered on the life atlas map using Deck.gl's `HeatmapLayer`.
 
 Data pipeline:
-- `~/dock/lib/agent/running-coach/tools/export_heatmap.py` fetches all run activity polylines from Strava via the existing OAuth token, decodes them, clips a privacy radius around home, and writes `src/data/running-heatmap.json`
-- The JSON is a flat `[[lng, lat], ...]` array baked into the static build — no runtime auth required
-- `@deck.gl/aggregation-layers` added as a dependency for `HeatmapLayer`
+- `~/dock/lib/agent/running-coach/tools/export_heatmap.py` fetches all run activity polylines from Strava via the existing OAuth token, decodes them, and clips a privacy radius around home before writing to `src/data/`.
+- **Per-area heatmaps (displayed `running-heatmap-1yr.json`).** Runs are clustered by distance into areas (`--format areas`) so the map can normalize each area's heat *relative to that area* — a vacation run looks as hot as a dense home metro. Without this, deck.gl's `HeatmapLayer` normalizes against the global max density (and its `boundsContain` guard skips re-normalizing on zoom-in), so intra-area patterns wash out. The component (`src/components/running-heatmap.tsx`) feeds the layer only the active area's points; swapping that array reference forces re-aggregation. Shape: `{"areas": [{id, label, center, zoom, bounds, runCount, points}, ...]}`.
+- **Hybrid area labeling.** `src/data/running-regions.json` holds `seeds` (named anchors with center+zoom; currently SF + Foster City) and the cluster/match radii. A cluster within `matchRadiusKm` of a seed adopts its label + framing; everything else auto-surfaces as a `travel-N` area framed to its own bounds. Add a seed to name a recurring travel spot. `"seededOnly": true` (currently set) drops all unmatched clusters so only seed areas render — the page shows home (SF) + work (Foster City) only.
+- **All-time `running-heatmap.json` stays flat** (`[[lng, lat], ...]`) — it's regenerated for consistency but not imported by the page, so it keeps the legacy shape.
+- The JSON is baked into the static build — no runtime auth required. `@deck.gl/aggregation-layers` provides `HeatmapLayer`.
 
-Privacy config at `~/.config/running-coach/home_location.json` (not committed):
-```json
-{ "lat": 37.7551, "lng": -122.4307, "clip_radius_km": 0.8 }
-```
+Privacy: home is point-clipped at source (`clip_radius_km`); published `center`/`bounds` are derived from already-clipped points and rounded to 4 decimals, so they can't reveal home. Config at `~/.config/running-coach/home_location.json` (not committed), e.g. `{ "lat": ..., "lng": ..., "clip_radius_km": 0.8 }`.
 
-To refresh after new runs:
+Refresh cadence: the running-coach **weekly brief** (Mondays) regenerates both `running-heatmap-1yr.json` (displayed, areas) and the all-time `running-heatmap.json` (flat) as step 2 of its Send section, and flags a push reminder in the brief when the data changed. The data files are committed but **pushed manually** (public repo). Off-cycle manual refresh:
 ```bash
 cd ~/dock
-/home/cdrake/dock/virtualenvs/running-coach/bin/python lib/agent/running-coach/tools/export_heatmap.py
-# commit src/data/running-heatmap.json and push
+RC=/home/cdrake/dock/virtualenvs/running-coach/bin/python
+$RC lib/agent/running-coach/tools/export_heatmap.py --since-days 365 --output running-heatmap-1yr.json --format areas
+$RC lib/agent/running-coach/tools/export_heatmap.py
+# review the src/data/running-heatmap*.json + running-regions.json diffs, then commit + push
+```
+
+## Running page sidebar
+
+The `/running` sidebar (`src/components/running-heatmap.tsx`) intentionally omits health/recovery status and any month-by-month mileage breakdown — those are not published. It carries: two PR cards in a grid (5K PR / Half PR) plus a full-width latest-race card (race name on the left, finish time on the right — all link to the Strava activity), the Upcoming races block, the prose narrative (`content/running.md`), and a **Follow on Strava** button (Strava-orange `#FC4C02`) linking to the public athlete profile `strava.com/athletes/4689756` (id baked in at build — static export, no runtime token). When editing, do not reintroduce a live "Status" card or a per-month chart.
+
+The stat cards are **computed weekly from Strava** (not hardcoded): `lib/agent/running-coach/tools/export_stats.py` writes `src/data/running-stats.json` (`{ "stats": [{label, value, sub, url}], "latestRace": {name, time, sub, url} }`), which the component imports. It runs in the running-coach weekly brief (step 2) alongside the heatmap/race exports. To refresh off-cycle: `~/dock/virtualenvs/running-coach/bin/python lib/agent/running-coach/tools/export_stats.py`, then review + push.
+
+## Race Calendar (/running page)
+
+The `/running` page sidebar renders an "Upcoming races" block above the prose, driven by `src/data/race-calendar.json`.
+
+Data pipeline:
+- Source of truth is private in dock: `~/dock/lib/agent/running-coach/memory/race_calendar.json` (full calendar with goal times, notes, backups, planning).
+- `~/dock/lib/agent/running-coach/tools/export_races.py` writes the **public subset** to `src/data/race-calendar.json` — only `status==locked && public==true` races, fields `name/date/location` only. Goal times, notes, backups, and planning internals never leave dock.
+- `src/components/running-heatmap.tsx` imports the JSON at build time and renders the block (hidden when the array is empty). The build fails if the file is missing, so it is committed.
+
+To refresh after the calendar changes (edit the dock JSON, then):
+```bash
+cd ~/dock
+/home/cdrake/dock/virtualenvs/running-coach/bin/python lib/agent/running-coach/tools/export_races.py
+pnpm -F drake-life-map build   # verify
+# review the src/data/race-calendar.json diff, then commit + push
 ```
 
 ## Likely Next Good Steps

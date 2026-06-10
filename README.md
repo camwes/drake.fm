@@ -21,24 +21,28 @@ pnpm -F drake-life-map build
 
 ## Running Heatmap
 
-The life atlas map displays a Strava running heatmap generated from your activity data.
+The `/running` page displays a Strava running heatmap generated from your activity data, split into **per-area** views so each area's heat normalizes relative to that area.
 
 **One-time setup** — create `~/.config/running-coach/home_location.json` with your home coordinates and desired clip radius:
 
 ```json
-{ "lat": 37.7551, "lng": -122.4307, "clip_radius_km": 0.8 }
+{ "lat": YOUR_LAT, "lng": YOUR_LNG, "clip_radius_km": 0.8 }
 ```
 
 Points within `clip_radius_km` of home are stripped before the data is committed to keep your home location private.
+
+**Areas + seeds.** The displayed `src/data/running-heatmap-1yr.json` is clustered into areas (`{"areas": [...]}`). `src/data/running-regions.json` names anchor areas via `seeds` (e.g. San Francisco, Foster City) and sets the cluster/match radii; runs outside any seed auto-surface as `travel-N` areas. Add a seed to give a recurring spot a real name + framing. Set `"seededOnly": true` (the current default) to render only seed areas and drop everything else.
 
 **Regenerate after new runs:**
 
 ```bash
 cd ~/dock
-/home/cdrake/dock/virtualenvs/running-coach/bin/python lib/agent/running-coach/tools/export_heatmap.py
+RC=/home/cdrake/dock/virtualenvs/running-coach/bin/python
+$RC lib/agent/running-coach/tools/export_heatmap.py --since-days 365 --output running-heatmap-1yr.json --format areas
+$RC lib/agent/running-coach/tools/export_heatmap.py   # all-time, flat
 ```
 
-Then commit `src/data/running-heatmap.json` and push. The heatmap data is baked into the static build — no runtime Strava auth needed.
+Then commit the `src/data/running-heatmap*.json` files and push. The heatmap data is baked into the static build — no runtime Strava auth needed.
 
 ## Project Structure
 

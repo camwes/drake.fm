@@ -104,12 +104,13 @@ Never commit:
 Use extra caution with:
 - blog posts that mention private individuals, employers, clients, or internal projects
 - map timeline entries that reveal more location detail than intended
+- the running heatmap data (`src/data/running-heatmap*.json`) and `src/data/running-regions.json` — verify home stays radius-clipped and that area `center`/`bounds` (and seed centers) don't pinpoint a private location
 - files in `public/`, because they are directly downloadable
 - workflow changes that may expose environment details or deployment metadata
 
 Pre-push checklist:
 1. Run `git status --short` and review every changed file.
-2. Review diffs for `public/`, `content/blog`, and `src/data/life-events.ts`.
+2. Review diffs for `public/`, `content/blog`, `src/data/life-events.ts`, and `src/data/running-heatmap*.json` / `running-regions.json`.
 3. Confirm no secrets or exported source material were added.
 4. Run `pnpm run lint` and `pnpm run build`.
 5. Update `README.md` and `WORKLOG.md` if public behavior, deployment, or content sourcing changed.
