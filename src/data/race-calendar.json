@@ -1,8 +1,18 @@
 [
   {
-    "name": "Napa to Sonoma Half",
+    "name": "AJC Peachtree Road Race",
+    "date": "2026-07-04",
+    "location": "Atlanta, GA"
+  },
+  {
+    "name": "San Francisco Marathon \u2014 1st Half",
     "date": "2026-07-26",
-    "location": "Napa, CA"
+    "location": "San Francisco, CA"
+  },
+  {
+    "name": "JPMorgan Chase Corporate Challenge \u2014 San Francisco",
+    "date": "2026-09-10",
+    "location": "San Francisco, CA"
   },
   {
     "name": "Rock 'n' Roll San Jose Half",

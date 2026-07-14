@@ -1,21 +1,5 @@
-I stopped running in late 2021. Three years went by — no injury, no reason, just stopped.
-When I picked it back up in October 2024, I didn't ease in.
+Growing up running was a major part of my life. From middle school on I ran track and eventually cross country. I was competitive at the Illinois state level, which was barely good enough to walk on at Stanford, so my competitive running career came to an end my freshman year. Nonetheless throughout college I continued to run for fun, still capable of running sub 80 minute half marathons on the drop of a hat because I still had youth on my side. Once I left the farm I just gradually lost touch with the sport.
 
-68 miles the first month, 43 the next. My body couldn't handle the ramp.
-By December, small muscle tears had me barely able to run. January 2025: 6 miles total.
-That was the floor.
+When the pandemic hit I started running again because there was nothing else to do and I was living in Cole Valley very close to Golden Gate Park. I was starting to get into pretty decent shape when I started to experience chronic injuries that I didnt experience in my younger running days. Eventually, I got tired of the cycle of getting hurt, working hard to recover only to get injured again and eventually gave up running again.
 
-I rebuilt slowly, and by May 2025 things started clicking — 74 miles, the first real
-breakthrough month. August hit 92 miles before a bunion flare and achilles
-compensation forced another step back. Custom orthotics, eccentric heel drops,
-a podiatrist visit. The boring stuff that actually works.
-
-2026 has been different. Consistent, healthy, and actually fast. Career-best 5K in February,
-first organized race in years in March. The longest unbroken high-mileage streak since I
-started keeping records.
-
-The heatmap is where all of this happened: the Bay Trail between Foster City and San Mateo,
-the streets of San Francisco, the occasional park loop. Most of it looks the same
-from the outside — one foot in front of the other, early morning, orange glow on the bay.
-
-Working toward a half marathon. The calendar is set: Napa to Sonoma in July, Rock 'n' Roll San Jose in October — two flat, fast NorCal halfs to chase a faster time on.
+About a year and a half ago I decided that I wanted to get back into running, seriously. Since this restart I've had to deal with a lot of different injuries being nearly 40 but I've also started to take my training more seriously. Running is how I clear my mind, how I start my day with more energy and how I give myself time with my thoughts in between parenting and work. I still have race goals (like running a sub 90 half and sub 18 5k) but if I can stay healthy and keep stacking miles I'll be happy.

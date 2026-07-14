@@ -9,7 +9,10 @@ import ReactMarkdown from "react-markdown";
 import runningHeatmap from "@/data/running-heatmap-1yr.json";
 import upcomingRaces from "@/data/race-calendar.json";
 import runningStats from "@/data/running-stats.json";
+import { PickCard } from "@/components/pick-card";
 import { mapStyleForTheme, clampZoom, type AtlasViewState } from "@/lib/life-atlas-utils";
+import { colorFromDifficultyScore } from "@/lib/salon-map";
+import { getRoutePickGroups } from "@/lib/salon";
 import { useTheme } from "@drake/ui";
 
 type Area = {
@@ -44,6 +47,8 @@ type LatestRace = { name: string; time: string; sub: string; url: string };
 const LATEST_RACE = (runningStats as { latestRace?: LatestRace | null }).latestRace ?? null;
 
 const STRAVA_PROFILE_URL = "https://www.strava.com/athletes/4689756";
+
+const ROUTE_GROUPS = getRoutePickGroups();
 
 const MONTH_NAMES = [
   "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -268,6 +273,30 @@ export function RunningHeatmap({ prose }: { prose: string }) {
             <div className="space-y-4 text-sm leading-relaxed text-[var(--c-muted-9)] [&>p]:mb-0">
               <ReactMarkdown>{prose}</ReactMarkdown>
             </div>
+
+            {ROUTE_GROUPS.length > 0 ? (
+              <div className="space-y-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[var(--c-muted-5)]">
+                  Favorite routes
+                </p>
+                {ROUTE_GROUPS.map((group) => (
+                  <div key={group.collectionId} className="space-y-3">
+                    <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[var(--c-muted-5)]">
+                      {group.areaLabel ?? group.title}
+                    </p>
+                    <div className="space-y-3">
+                      {group.picks.map((pick) => (
+                        <PickCard
+                          key={pick.id}
+                          pick={pick}
+                          color={colorFromDifficultyScore(pick.route.difficultyScore ?? 0.5)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : null}
 
             <a
               href={STRAVA_PROFILE_URL}

@@ -44,6 +44,22 @@ $RC lib/agent/running-coach/tools/export_heatmap.py   # all-time, flat
 
 Then commit the `src/data/running-heatmap*.json` files and push. The heatmap data is baked into the static build — no runtime Strava auth needed.
 
+## Salon
+
+The `/salon` hub publishes curated personal recommendations ("picks"), with per-collection pages at `/salon/<collection-id>` (e.g. `/salon/sf-running`). Phase 1 covers hand-entered running routes; the data model is domain-agnostic so future domains (places, music) are additive.
+
+**Source of truth lives in the private Obsidian vault**, not in this repo — one folder per collection under `projects/Obsidian/drake.fm/salon/picks/<collection>/`, with a `_collection.md` (frontmatter metadata) and one markdown note per pick (frontmatter + body = the *why*). `src/data/salon.json` is **generated** — do not hand-edit.
+
+**Regenerate after editing picks:**
+
+```bash
+cd ~/dock
+python3 lib/agent/salon/tools/export_salon.py            # writes src/data/salon.json
+python3 lib/agent/salon/tools/export_salon.py --dry-run  # preview without writing
+```
+
+The exporter publishes only `visibility: public` collections/picks (fail-closed), strips any precise coordinates (publishing only a collection's coarse area center), and skips literal `TODO` placeholder values so half-authored picks never leak. Full schema + rules: `lib/agent/salon/README.md`.
+
 ## Project Structure
 
 - `src/app/` — app routes
@@ -51,6 +67,7 @@ Then commit the `src/data/running-heatmap*.json` files and push. The heatmap dat
 - `src/data/life-events.ts` — timeline data for the map
 - `src/lib/` — utilities (blog parsing, map camera and route helpers)
 - `content/blog/` — markdown blog posts
+- `src/app/salon/` — `/salon` hub + `/salon/[collection]` pages (data from `src/data/salon.json`)
 - `.github/workflows/deploy-pages.yml` — GitHub Pages workflow
 - `WORKLOG.md` — current project state and hosting notes
 

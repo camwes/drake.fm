@@ -105,6 +105,7 @@ Use extra caution with:
 - blog posts that mention private individuals, employers, clients, or internal projects
 - map timeline entries that reveal more location detail than intended
 - the running heatmap data (`src/data/running-heatmap*.json`) and `src/data/running-regions.json` — verify home stays radius-clipped and that area `center`/`bounds` (and seed centers) don't pinpoint a private location
+- the Salon data (`src/data/salon.json`) — exporter-generated from the vault; verify it carries no precise pick coordinates (only coarse collection `area` centers, which must not pinpoint a private location). Any future GPX/polyline media must be home-radius-clipped like the heatmap before publishing. See `lib/agent/salon/README.md`
 - files in `public/`, because they are directly downloadable
 - workflow changes that may expose environment details or deployment metadata
 
